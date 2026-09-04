@@ -83,6 +83,13 @@ Result at 2x margin: MARGIN_CALL in month 11 (Oct 2008 -16.8%), final equity $28
 -38.5% year). 1 cash-secured contract: SURVIVED, $64.8k (-35%) — drawdown without spiral.
 PAPER ONLY — no order placement anywhere in the module.
 
+Book replay (added 2026-09-04): `replay_book(portfolio_value, eps, ...)` in margin_stress.py rolls a
+staggered entry schedule (num_entries, entry_spacing_days) through the 2008 monthly path. Entries
+are gate-filtered (min_yield_annual_pct) and strike-sized at the EPS line; puts price at their own
+entry-month spot with independent remaining DTE. VZ book ($100k, EPS 3.84, 4 entries / 21-day
+spacing): cash-secured SURVIVED at $78.8k (-21% on a -38.5% year); 2x margin MARGIN_CALL month 10
+(Oct 2008), final $38.0k (-62%). CLI: `--num-entries 4 --entry-spacing-days 21`.
+
 ## Key Source Files
 
 - `config.yaml` — strategy + theta farming params (tuning knobs: `breakout_strength`
