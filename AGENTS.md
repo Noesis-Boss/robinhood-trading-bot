@@ -63,6 +63,8 @@ Strategy: `src/eps_line_put_selling.py` — sell LONG-dated puts (default 730 DT
 "two-year put") when price is at/below the EPS line (trailing EPS x target P/E, default 15).
 Cash-secured by default; optional margin securing for stress testing. Strike defaults to the
 EPS line itself (assignment at fair value is the thesis). Premium via Black-Scholes (bs_put_price).
+Non-earners are skipped: generate_trade returns None for zero/negative EPS, so loss-making
+trailing-EPS symbols (e.g. F) can never anchor a nonsensical strike.
 Config: `eps_line_put_selling` block in config.yaml (`eps` per-symbol map, `target_pe`, `dte`, `iv`,
 `max_collateral_pct` 0.30, `min_days_between_entries` 21, `securing` cash|margin, `margin_leverage`).
 Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and web API
