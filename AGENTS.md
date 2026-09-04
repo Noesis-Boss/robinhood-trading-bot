@@ -57,6 +57,24 @@ Results with the retuned premarket-box windows (`capital: 10000`):
   spread width bounds max loss ~$20–30)
 - Exit reasons: theta_spread 33, eod_close 24, stop_loss 7, target_hit 2
 
+## EPS-Line Put Selling (added 2026-09-04, paper-only)
+
+Strategy: `src/eps_line_put_selling.py` — sell LONG-dated puts (default 730 DTE, the
+"two-year put") when price is at/below the EPS line (trailing EPS x target P/E, default 15).
+Cash-secured by default; optional margin securing for stress testing. Strike defaults to the
+EPS line itself (assignment at fair value is the thesis). Premium via Black-Scholes (bs_put_price).
+Config: `eps_line_put_selling` block in config.yaml (`eps` per-symbol map, `target_pe`, `dte`, `iv`,
+`max_collateral_pct` 0.30, `min_days_between_entries` 21, `securing` cash|margin, `margin_leverage`).
+Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and web API
+(`--strategy eps_line_put_selling`); summary reports premium_collected / open_max_liability.
+
+Margin stress: `src/margin_stress.py` — replays the real 2008 SPX monthly path (-38.5%) with
+stressed IV on down months, maintenance-margin check, forced-liquidation spiral detection.
+Run: `python3 -m src.margin_stress --portfolio-value 100000 --eps 28 --securing margin --margin-leverage 2.0`
+Result at 2x margin: MARGIN_CALL in month 11 (Oct 2008 -16.8%), final equity $28.4k (-72% on a
+-38.5% year). 1 cash-secured contract: SURVIVED, $64.8k (-35%) — drawdown without spiral.
+PAPER ONLY — no order placement anywhere in the module.
+
 ## Key Source Files
 
 - `config.yaml` — strategy + theta farming params (tuning knobs: `breakout_strength`
@@ -150,6 +168,7 @@ Results with the retuned premarket-box windows (`capital: 10000`):
 
 - 2026-08-09 — Added selectable `RossMomentumStrategy` in `src/ross_momentum.py`, deterministic tests in `tests/test_ross_momentum.py`, `--strategy {london,ross}` with London default, and `ross_momentum` config thresholds. Canonical Alpaca run completed: Ross 676 trades, -$2,321.58, 46.3% win rate, 0.68 profit factor; London comparison 66 trades, +$1,232.18, 59.1%, 1.44. Ross is research-only until its high zero/stop-loss rate is addressed.
 - 2026-08-10 — Added selectable `SneakyPivotStrategy` in `src/sneaky_pivot.py`, deterministic tests in `tests/test_sneaky_pivot.py`, and `--strategy sneaky`. A two-symbol Alpaca smoke run (SPY/QQQ, 2026-07-01 to 2026-08-06) produced 68 trades, -$35.31, 60.3% win rate, and 0.93 profit factor. This is not a profitability claim; the strategy remains research-only.
+- 2026-09-04 — `eps_line_put_selling`: EPS auto-fetch wired in the web API (`/api/backtest` resolves trailing EPS via yfinance for symbols missing a manual value) and in the runner (`src/eps_line_put_selling._parse_eps` now accepts `eps: {"eps": {SYM: val}}` from `/zo/ask`-style wrappers). Live yfinance validation 2026-07-01→2026-09-03, $100k, VZ (EPS 3.87, PE line 58.05): 4 cash-secured positions (21-day spacing), $28,495 premium collected, $77,691 open max liability, paper-only. Caveat fixed: local-only `main` branch was shadowing `master`; unified to `master`, set upstream, force-pushed `6218d0b`; remote and local are in sync.
 - 2026-08-10 — Added selectable `HAScalpStrategy` in `src/ha_scalp.py` and `--strategy ha_scalp`. Six-month Alpaca run at $300 across all 13 symbols (2026-02-10 to 2026-08-10) used 15-minute bars as a runtime approximation to the source's 1-minute chart and produced zero qualifying signals. No profitability claim is made.
 
 ## Verified Edge (2026-08-30)

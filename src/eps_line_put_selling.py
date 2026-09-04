@@ -61,6 +61,8 @@ class EpsLinePutSellingStrategy:
     def _parse_eps(cfg):
         eps = cfg.get("eps", {})
         if isinstance(eps, dict):
+            if "eps" in eps and isinstance(eps["eps"], dict):
+                eps = eps["eps"]
             return {str(k).upper(): float(v) for k, v in eps.items() if v}
         if isinstance(eps, (int, float)):
             return float(eps)
