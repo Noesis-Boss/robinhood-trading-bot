@@ -81,3 +81,8 @@ def test_margin_stress_margin_secured_flags_call():
 def test_stress_path_is_real_2008_shape():
     assert len(PATH_2008) == 12
     assert sum(PATH_2008) < -0.30
+
+
+def test_negative_eps_never_trades():
+    strat = make_strategy(eps=-1.91)
+    assert strat.generate_trade("SPY", day(close=25.0)) is None

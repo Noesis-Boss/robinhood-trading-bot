@@ -82,7 +82,7 @@ class EpsLinePutSellingStrategy:
         if len(day_data) < 2:
             return None
         eps = self.eps_for(symbol)
-        if not eps:
+        if not eps or eps <= 0:
             return None
         close = float(day_data["close"].iloc[-1])
         day = pd.Timestamp(day_data.index[-1]).date()

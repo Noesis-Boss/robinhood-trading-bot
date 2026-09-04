@@ -350,9 +350,15 @@ def _resolve_missing_eps(symbols, params):
         for sym in missing:
             try:
                 value = yf.Ticker(sym).info.get("trailingEps")
-                if value:
+                if value and float(value) > 0:
                     eps_map[sym] = float(value)
                     resolved[sym] = float(value)
+                elif value:
+                    logging.warning(
+                        "Skipping %s: trailing EPS %.2f is not positive (loss-making or distorted)",
+                        sym,
+                        float(value),
+                    )
             except Exception as exc:
                 logging.warning("Could not fetch trailing EPS for %s: %s", sym, exc)
     return eps_map, resolved
