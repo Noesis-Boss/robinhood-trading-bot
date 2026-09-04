@@ -40,6 +40,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 
 
 STRATEGY_MAP = {
+
     "london": LondonBreakoutStrategy,
     "ross": RossMomentumStrategy,
     "sneaky": SneakyPivotStrategy,
@@ -330,6 +331,33 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
     return all_trades
 
 
+def _resolve_missing_eps(symbols, params):
+    """Fill in per-symbol trailing EPS via yfinance when not configured."""
+    eps_cfg = params.get("eps", {})
+    if isinstance(eps_cfg, dict) and "eps" in eps_cfg and isinstance(eps_cfg["eps"], dict):
+        eps_cfg = eps_cfg["eps"]
+    if isinstance(eps_cfg, (int, float)):
+        eps_map = {s: eps_cfg for s in symbols}
+    elif isinstance(eps_cfg, dict):
+        upper = {str(k).upper(): v for k, v in eps_cfg.items() if v}
+        eps_map = {s: upper.get(s.upper()) for s in symbols}
+    else:
+        eps_map = {s: None for s in symbols}
+    resolved = {}
+    missing = [s for s, v in eps_map.items() if not v]
+    if missing:
+        import yfinance as yf
+        for sym in missing:
+            try:
+                value = yf.Ticker(sym).info.get("trailingEps")
+                if value:
+                    eps_map[sym] = float(value)
+                    resolved[sym] = float(value)
+            except Exception as exc:
+                logging.warning("Could not fetch trailing EPS for %s: %s", sym, exc)
+    return eps_map, resolved
+
+
 def main():
     parser = argparse.ArgumentParser(description="Trading strategy backtest")
     parser.add_argument("--symbols", nargs="+", default=["SPY", "QQQ", "AAPL", "TSLA", "NVDA"])
@@ -362,6 +390,13 @@ def main():
         if not isinstance(params, dict):
             raise ValueError("--strategy-params must be a JSON object")
         config.setdefault(args.strategy, {}).update(params)
+    if args.strategy == "eps_line_put_selling":
+        block = config.setdefault("eps_line_put_selling", {})
+        eps_map, resolved = _resolve_missing_eps(args.symbols, block)
+        if eps_map:
+            block["eps"] = eps_map
+        for sym, value in resolved.items():
+            logging.info("Auto-resolved trailing EPS for %s: %.2f", sym, value)
     if args.capital:
         config["capital"] = args.capital
         config["max_risk_dollars"] = args.capital * config.get("risk_pct", 0.02)
