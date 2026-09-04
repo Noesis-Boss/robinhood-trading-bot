@@ -86,3 +86,22 @@ def test_stress_path_is_real_2008_shape():
 def test_negative_eps_never_trades():
     strat = make_strategy(eps=-1.91)
     assert strat.generate_trade("SPY", day(close=25.0)) is None
+
+
+def test_yield_gate_blocks_low_premium():
+    """Entry gate: skips entries whose annualized yield is below the floor."""
+    import pandas as pd
+
+    def frame(close):
+        idx = pd.date_range("2026-01-02", periods=2, freq="D")
+        return pd.DataFrame({"close": [close * 0.99, close]}, index=idx)
+
+    # IV 8% -> tiny premium for a 730-DTE ATM put -> annualized yield well under 5%
+    low = make_strategy(eps=20.0, min_days_between_entries=0, iv=0.08)
+    assert low.generate_trade("SPY", frame(295.0)) is None
+
+    # IV 35% -> premium rich enough to clear the 5% annualized floor
+    high = make_strategy(eps=20.0, min_days_between_entries=0, iv=0.35)
+    trade = high.generate_trade("SPY", frame(295.0))
+    assert trade is not None
+    assert trade["yield_annual_pct"] >= 5.0

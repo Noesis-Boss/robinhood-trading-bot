@@ -249,4 +249,5 @@ eps_line_put_selling:
   cooldown_days: 21
   max_collateral_pct: 0.30
   max_contracts: 5
+  min_yield_annual_pct: 5.0
   securing: "cash"

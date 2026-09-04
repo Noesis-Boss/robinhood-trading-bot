@@ -29,6 +29,7 @@ DEFAULTS = {
     "maintenance_margin_pct": 0.20,
     "min_days_between_entries": 21,
     "max_contracts": 5,
+    "min_yield_annual_pct": 5.0,
 }
 
 
@@ -96,6 +97,9 @@ class EpsLinePutSellingStrategy:
         strike = eps_line * self.cfg["strike_pct_of_eps_line"]
         years = self.cfg["dte"] / 365.0
         premium = bs_put_price(close, strike, years, self.cfg["iv"], self.cfg["risk_free"])
+        yield_annual_pct = (premium / strike) / years * 100.0
+        if yield_annual_pct < self.cfg["min_yield_annual_pct"]:
+            return None
         collateral_per_contract = strike * 100.0
         budget = self.collateral_available() * self.cfg["max_collateral_pct"]
         contracts = int(budget / collateral_per_contract)
@@ -117,6 +121,7 @@ class EpsLinePutSellingStrategy:
             "premium_collected": round(premium * 100.0 * contracts, 2),
             "max_liability": round((strike - premium) * 100.0 * contracts, 2),
             "securing": self.cfg["securing"],
+            "yield_annual_pct": round(yield_annual_pct, 2),
             "entry_date": str(day),
             "expiry_date": str(day + timedelta(days=self.cfg["dte"])),
             "pnl": 0.0,
