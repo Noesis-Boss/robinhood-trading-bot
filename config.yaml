@@ -1,0 +1,252 @@
+capital: 10000
+risk_pct: 0.02
+max_risk_dollars: 500
+bar_interval: "5m"
+timezone: "America/New_York"
+# Available-data windows (retuned 2026-08-08 for Alpaca IEX free feed):
+#   Free Alpaca IEX supplies premarket bars only from 08:00 ET (no London data),
+#   so the breakout box is built from the 08:00-09:25 premarket window and
+#   entries are taken on regular-session breakouts (09:30-12:00 ET).
+london_open: "08:00"   # premarket box start (earliest free Alpaca bar)
+london_close: "09:25"  # premarket box end (just before regular open)
+ny_open: "09:30"       # entry window start = regular session open
+ny_close: "12:00"
+
+# Position sizing
+# fractional_shares: true -> long buys use fractional share sizing (e.g. risk a
+#   fixed dollar amount on any stock by buying a fraction of a share).
+#   Shorts stay whole-share only (Robinhood does not support fractional shorts).
+# min_order_value: skip entries whose notional (qty * entry) is below this.
+fractional_shares: true
+min_order_value: 1.0
+
+# Strategy parameters
+min_box_pct: 0.005
+max_box_pct: 0.04
+entry_window_hours: 3
+volume_lookback: 20
+volume_multiplier: 0.8
+
+auction_flow_proxy:
+  confirm_rejection: true
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+
+vwap_liquidity_proxy:
+  volume_multiplier: 1.2
+  rr_ratio: 2.0
+  max_holding_bars: 30
+  atr_length: 14
+  atr_multiplier: 1.0
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+
+t3_range_filter:
+  enabled: false
+  backtest_interval: "1h"
+  t3_length: 8
+  t3_factor: 0.7
+  range_length: 14
+  range_multiplier: 2.0
+  atr_length: 14
+  atr_multiplier: 1.5
+  target_r: 2.0
+  max_holding_bars: 30
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+
+reversal_zone_confirmation:
+  enabled: false
+  backtest_interval: "1m"
+  level_lookback: 20
+  move_lookback: 3
+  min_move_pct: 0.004
+  structure_lookback: 3
+  confirmation_body_ratio: 0.5
+  volume_multiplier: 1.0
+  rr_ratio: 2.0
+  max_holding_bars: 30
+  session_start: "09:35"
+  session_end: "11:00"
+
+ema_cci_macd:
+  enabled: false
+  ema_fast: 50
+  ema_slow: 110
+  cci_length: 20
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  zone_touch_bars: 3
+  zone_proximity_pct: 0.002
+  volume_multiplier: 1.0
+  atr_length: 14
+  rr_ratio: 2.0
+  max_holding_bars: 30
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+  session_start: "09:35"
+  session_end: "15:45"
+
+ema9_continuation:
+  enabled: false
+  ema_length: 9
+  volume_multiplier: 1.2
+  pullback_bars: 3
+  touch_tolerance_pct: 0.002
+  rr_ratio: 2.0
+  atr_length: 14
+  atr_multiplier: 0.5
+  max_holding_bars: 30
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+  session_start: "09:35"
+  session_end: "15:45"
+ema20_stoch_pullback:
+  enabled: false
+  backtest_interval: "1m"
+  ema_length: 20
+  k_length: 8
+  d_length: 5
+  slowing: 3
+  deviation_pct: 0.002
+  target_fraction: 0.25
+  atr_length: 14
+  atr_multiplier: 1.0
+  volume_multiplier: 0.0
+  max_holding_bars: 30
+  session_start: "09:35"
+  session_end: "15:45"
+candle_narrative:
+  enabled: false
+  trend_ema: 20
+  zone_lookback: 30
+  pivot_left_right: 3
+  impulse_lookback: 4
+  pullback_lookback: 3
+  asymmetry_ratio: 1.5
+  min_engulf_ratio: 1.1
+  pin_wick_ratio: 2.0
+  min_body_ratio: 0.6
+  close_location: 0.75
+  volume_multiplier: 1.2
+  atr_stop_buffer: 0.25
+  zone_tolerance_atr: 0.5
+  rr_ratio: 2.0
+  max_holding_bars: 24
+  max_gap_pct: 0.08
+  max_bar_range_pct: 0.08
+  session_start: "09:35"
+  session_end: "12:30"
+directional_bias: true
+trend_filter: true
+trend_lookback: 20
+breakout_strength: 0.75
+rr_ratio: 2.0
+max_holding_bars: 30
+trailing_stop_breakeven: true
+early_exit_reversal: false
+
+ross_momentum:
+  min_gap_pct: 0.02
+  min_price: 1.0
+  min_relative_volume: 1.5
+  min_total_volume: 0
+  max_float: null
+  session_start: "04:00"
+  session_end: "12:00"
+  pullback_lookback: 4
+  ema_length: 9
+  entry_cutoff: "10:00"
+  rr_ratio: 1.5
+  max_holding_bars: 30
+
+sneaky_pivot:
+  swing_lookback: 2
+  proximity_pct: 0.003
+  session_start: "09:30"
+  session_end: "15:45"
+  rr_ratio: 1.0
+  max_holding_bars: 26
+
+ha_scalp:
+  backtest_interval: "15m"
+  ema_length: 100
+  doji_body_ratio: 0.35
+  min_wick_ratio: 0.2
+  min_volume_ratio: 1.0
+  rr_ratio: 1.0
+  session_start: "09:30"
+  session_end: "15:45"
+
+daily_universe:
+  enabled: false
+  output_path: "daily_universe.json"
+  max_symbols: 10
+  min_price: 1
+  max_price: 20
+  min_avg_dollar_volume: 5000000
+  min_premarket_dollar_volume: 500000
+  min_gap_pct: 0.04
+  max_gap_pct: 2.0
+  preferred_gap_pct: 0.10
+  min_relative_volume: 5.0
+  preferred_max_float: 20000000
+  max_spread_pct: 0.005
+  fallback_max_failures: 2
+
+fundamental_filter:
+  enabled: false
+  reject_below: 40
+  bonus_at: 60
+  max_bonus: 10
+  context_path: "fundamental_context.json"
+
+# Theta farming (options credit spreads after confirmed breakout)
+theta_farming:
+  enabled: true
+  min_days_to_expiry: 2
+  target_pop: 0.80
+  max_spread_width_pct: 0.02
+  contracts_per_trade: 1
+  max_risk_per_trade_pct: 0.02
+
+# Universe: core ETFs/mega-caps + low-priced liquid optionable names for variety
+symbols:
+  # Core (higher per-share — fractional sizing lets small accounts participate)
+  - "SPY"
+  - "QQQ"
+  - "AAPL"
+  - "TSLA"
+  - "NVDA"
+  # Low-priced, high-liquidity, optionable (whole-share friendly + weeklies for theta)
+  - "SOFI"
+  - "F"
+  - "AAL"
+  - "MARA"
+  - "RIVN"
+  - "NIO"
+  - "RBLX"
+  - "DKNG"
+
+risk_free_rate: 0.0
+execution_realism:
+  enabled: true
+  slippage_bps: 5.0
+  spread_bps: 5.0
+robinhood:
+  enabled: false
+
+# Zero-parameter seed for the eps_line_put_selling strategy (paper-only).
+# CLI/web runs work with no --strategy-params; per-run params override these.
+eps_line_put_selling:
+  symbols: ["SPY", "QQQ", "T", "VZ"]
+  target_pe: 15
+  dte: 730
+  iv: 0.22
+  risk_free: 0.045
+  eps_tolerance_pct: 0.02
+  cooldown_days: 21
+  max_collateral_pct: 0.30
+  max_contracts: 5
+  securing: "cash"

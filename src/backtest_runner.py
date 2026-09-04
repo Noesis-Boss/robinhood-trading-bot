@@ -22,7 +22,7 @@ from src.sneaky_pivot import SneakyPivotStrategy
 from src.ha_scalp import HAScalpStrategy
 from src.auction_flow_proxy import AuctionFlowProxyStrategy
 from src.theta_only import ThetaOnlyStrategy
-from src.eps_line_put_selling import EpsLinePutSellingStrategy
+from src.eps_line_put_selling import EpsLinePutSellingStrategy, bs_put_price
 from src.vwap_liquidity_proxy import VWAPLiquidityProxyStrategy
 from src.t3_range_filter import T3RangeFilterStrategy
 from src.reversal_zone_confirmation import ReversalZoneConfirmationStrategy
@@ -112,6 +112,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
 
     if strategy_name in ("theta_only", "eps_line_put_selling"):
         selected_symbols = strat.symbols_for_run(symbols) if strategy_name == "theta_only" else symbols
+        daily_frames = {}
         for symbol in selected_symbols:
             try:
                 cached = None
@@ -130,6 +131,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
             else:
                 df.index = df.index.tz_convert(config.get("timezone", "America/New_York"))
             df.columns = [str(column).lower() for column in df.columns]
+            daily_frames[symbol] = df
             for day in df.index.normalize().unique():
                 result = strat.generate_trade(symbol, df[df.index.normalize() == day].sort_index())
                 if result:
@@ -139,7 +141,15 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
             if strategy_name == "theta_only":
                 summary.update({"strategy": "theta_only", "selection_mode": strat.selection_mode, "aggressiveness": strat.preset_name, "directional_trades": 0})
             else:
-                summary.update({"strategy": "eps_line_put_selling", "paper_only": True, "open_positions": len(all_trades), "premium_collected": round(sum(t["premium_collected"] for t in all_trades), 2), "open_max_liability": round(sum(t["max_liability"] for t in all_trades), 2), "securing": strat.cfg["securing"], "dte": strat.cfg["dte"], "directional_trades": 0})
+                frames_by_symbol = daily_frames
+                unrealized = 0.0
+                for pos in strat.open_positions:
+                    frame = frames_by_symbol.get(pos["symbol"])
+                    spot = float(frame["close"].iloc[-1]) if frame is not None and not frame.empty else pos["entry"]
+                    days_elapsed = (pd.Timestamp(end_date).tz_localize("America/New_York") - pd.Timestamp(pos["entry_date"]).tz_localize("America/New_York")).days
+                    years = max((strat.cfg["dte"] - days_elapsed) / 365.0, 0.0)
+                    unrealized += bs_put_price(spot, pos["strike"], years, strat.cfg["iv"], strat.cfg["risk_free"]) * 100.0 * pos["contracts"]
+                summary.update({"strategy": "eps_line_put_selling", "paper_only": True, "open_positions": len(all_trades), "premium_collected": round(sum(t["premium_collected"] for t in all_trades), 2), "open_max_liability": round(sum(t["max_liability"] for t in all_trades), 2), "unrealized_mtm": round(unrealized, 2), "securing": strat.cfg["securing"], "dte": strat.cfg["dte"], "directional_trades": 0})
             print(json.dumps(summary, default=str))
         return all_trades
 
