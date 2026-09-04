@@ -68,7 +68,10 @@ trailing-EPS symbols (e.g. F) can never anchor a nonsensical strike.
 Config: `eps_line_put_selling` block in config.yaml (`eps` per-symbol map, `target_pe`, `dte`, `iv`,
 `max_collateral_pct` 0.30, `min_days_between_entries` 21, `securing` cash|margin, `margin_leverage`).
 Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and web API
-(`--strategy eps_line_put_selling`); summary reports premium_collected / open_max_liability.
+(`--strategy eps_line_put_selling`); summary reports premium_collected / open_max_liability /
+unrealized_mtm (Black-Scholes mark-to-market of open puts at the window-end close).
+Zero-param runs work: config.yaml `eps_line_put_selling` seed (SPY/QQQ/T/VZ) + auto-resolve
+of missing trailing EPS via yfinance in the runner.
 
 Margin stress: `src/margin_stress.py` — replays the real 2008 SPX monthly path (-38.5%) with
 stressed IV on down months, maintenance-margin check, forced-liquidation spiral detection.
