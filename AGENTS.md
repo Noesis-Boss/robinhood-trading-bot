@@ -70,6 +70,9 @@ Config: `eps_line_put_selling` block in config.yaml (`eps` per-symbol map, `targ
 Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and web API
 (`--strategy eps_line_put_selling`); summary reports premium_collected / open_max_liability /
 unrealized_mtm (Black-Scholes mark-to-market of open puts at the window-end close).
+Entry gate: `min_yield_annual_pct` (default 5.0) blocks entries whose annualized yield
+(premium/strike, DTE-adjusted) is below the floor — dead-money low-IV entries never fire;
+each trade reports `yield_annual_pct`.
 Zero-param runs work: config.yaml `eps_line_put_selling` seed (SPY/QQQ/T/VZ) + auto-resolve
 of missing trailing EPS via yfinance in the runner.
 
