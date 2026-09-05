@@ -177,7 +177,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
             df.columns = [str(column).lower() for column in df.columns]
             daily_frames[symbol] = df
             for day in df.index.normalize().unique():
-                result = strat.generate_trade(symbol, df[df.index.normalize() == day].sort_index())
+                result = strat.generate_trade(symbol, df[df.index <= day].sort_index())
                 if result:
                     all_trades.append(result)
         if json_output:

@@ -326,3 +326,16 @@ Live check 2026-09-05: SPY 770.19, net GEX -6.3M (negative regime),
 expiries 2026-09-08..09-11. NAIVE assumption (dealers long calls / short puts) —
 proxy only, no dealer-positioning ground truth. Read-only; no order placement;
 not wired into London entries. Use as context filter only, never as a signal.
+
+## Video Eval: "Gamma Trading: The Edge Market Makers Wished You Didn't Know" (Rader Trader, WBqxiVthqEk, 2026-09-05)
+
+**Verdict: 6/10 concept, 3/10 evidence, 2/10 stack fit — NOT tradeable on Alpaca IEX. Stream closed.**
+Dealer-hedging mechanics (gamma flip, range compression vs waterfall risk) are real and well-taught,
+but all three presented strategies require options open interest / real-time option flow — IEX feed
+is OHLCV only, historical OI is not freely available for backtesting. The flagship "Option Volume
+Imbalance" strategy is the author's proprietary paid-platform tool (unverifiable by design). Zero
+backtests shown in 43 minutes; examples cherry-picked. Unbacked claims rejected: gamma hedging
+"controls" 2026 markets, JEX flip always important. The JEX-flip playbook reduces to fading opening
+drives — already tested as opening_drive_fade and failed (see above). Gamma monitor context:
+src/gamma_monitor.py SPY GEX proxy uses a naive dealer assumption (calls+/puts-); regime label is
+context, not a trading signal.

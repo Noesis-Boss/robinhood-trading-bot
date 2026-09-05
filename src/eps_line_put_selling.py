@@ -60,6 +60,15 @@ class EpsLinePutSellingStrategy:
         self.open_positions = []
         self._last_entry = {}
         self.paper_only = True
+        self.blocked_entries = {
+            "no_eps": 0,
+            "min_days_between_entries": 0,
+            "above_eps_line": 0,
+            "max_distance_to_line_pct": 0,
+            "rsi_max": 0,
+            "min_yield_annual_pct": 0,
+            "no_collateral": 0,
+        }
 
     @staticmethod
     def _parse_eps(cfg):
@@ -99,21 +108,26 @@ class EpsLinePutSellingStrategy:
             return None
         eps = self.eps_for(symbol)
         if not eps or eps <= 0:
+            self.blocked_entries["no_eps"] += 1
             return None
         close = float(day_data["close"].iloc[-1])
         day = pd.Timestamp(day_data.index[-1]).date()
         last = self._last_entry.get(symbol)
         if last and (day - last).days < self.cfg["min_days_between_entries"]:
+            self.blocked_entries["min_days_between_entries"] += 1
             return None
         eps_line = eps * self.cfg["target_pe"]
         if close > eps_line * (1 + self.cfg["entry_tolerance_pct"]):
+            self.blocked_entries["above_eps_line"] += 1
             return None
         distance_pct = abs(close - eps_line) / eps_line * 100.0
         if distance_pct > self.cfg["max_distance_to_line_pct"]:
+            self.blocked_entries["max_distance_to_line_pct"] += 1
             return None
         closes = list(day_data["close"].iloc[-(self.cfg["rsi_period"] + 1):])
         rsi = self._rsi(closes, self.cfg["rsi_period"])
         if rsi is not None and rsi > self.cfg["rsi_max"]:
+            self.blocked_entries["rsi_max"] += 1
             return None
 
         strike = eps_line * self.cfg["strike_pct_of_eps_line"]
@@ -121,12 +135,14 @@ class EpsLinePutSellingStrategy:
         premium = bs_put_price(close, strike, years, self.cfg["iv"], self.cfg["risk_free"])
         yield_annual_pct = (premium / strike) / years * 100.0
         if yield_annual_pct < self.cfg["min_yield_annual_pct"]:
+            self.blocked_entries["min_yield_annual_pct"] += 1
             return None
         collateral_per_contract = strike * 100.0
         budget = self.collateral_available() * self.cfg["max_collateral_pct"]
         contracts = int(budget / collateral_per_contract)
         contracts = min(contracts, self.cfg["max_contracts"])
         if contracts < 1:
+            self.blocked_entries["no_collateral"] += 1
             return None
 
         trade = {
