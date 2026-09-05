@@ -272,3 +272,23 @@ E-best params + gate: buffer 1.0 → 21 trades -$256; 2.0 → 20 trades -$311.70
 3.0 → 20 trades -$335.64 (30% win, PF 0.63). Level gating raised win rate (21→30%) but cut profit
 trades harder than losers — net worse than the -$94 ungated baseline. Both variants closed: strategy
 parked, kept out of rotation.
+
+## Regime Filter experiment (2026-09-05, paper-only)
+
+Added `regime_filter` config block to `src/backtest_runner.py` (london only, disabled by
+default): daily SPY SMA-N gates long/short entries; `invert: true` flips the gate.
+Purpose: test whether monthly variance (Mar/May losses vs Jun/Jul gains) is regime-driven.
+
+Monthly 13-symbol results (Alpaca 5m, theta on, realism on), directional trades:
+
+| Variant | Trades | Net | Verdict |
+|---|---|---|---|
+| No filter (baseline) | 386 | +$2,204 | best overall |
+| Trend-aligned (long when SPY>SMA50) | 81 | +$326 | actively hurts (kills Jul +$1,502 → -$603) |
+| Inverted (long when SPY<SMA50) | 106 | +$1,449 | halves trades, keeps most P&L, but Mar/May still lose |
+
+Verdict: regime filter does NOT beat the unfiltered baseline. The classic trend filter
+destroys the edge (London breakouts work as counter-trend reversals more than
+trend-continuations here). Inverted variant is intriguing (higher per-trade efficiency)
+but gains concentrate in Jun-Aug exactly like the baseline — same variance problem,
+smaller sample. No variant adopted; London stays unfiltered, paper-only.

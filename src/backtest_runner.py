@@ -157,6 +157,23 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
             print(json.dumps(summary, default=str))
         return all_trades
 
+    regime_cfg = config.get("regime_filter", {})
+    regime_enabled = bool(regime_cfg.get("enabled", False)) and strategy_name == "london"
+    regime_map = {}
+    if regime_enabled:
+        r_sym = regime_cfg.get("symbol", "SPY")
+        ma_len = int(regime_cfg.get("ma_length", 50))
+        r_start = (pd.Timestamp(start_date) - pd.Timedelta(days=ma_len * 2 + 15)).strftime("%Y-%m-%d")
+        spy = feed.get_bars(r_sym, interval="1d", start=r_start, end=end_date)
+        if spy.empty:
+            log.warning("regime_filter: no daily bars for %s — filter inactive", r_sym)
+            regime_enabled = False
+        else:
+            sma = spy["close"].rolling(ma_len).mean()
+            invert = bool(regime_cfg.get("invert", False))
+            regime_map = {ts.date(): bool(c > m) != invert for ts, c, m in zip(spy.index, spy["close"], sma) if pd.notna(m)}
+            log.info("regime_filter: %d regime days for %s (SMA%d)", len(regime_map), r_sym, ma_len)
+
     theta_cfg = config.get("theta_farming", {})
     theta_farmer = ThetaFarmer(theta_cfg) if theta_cfg.get("enabled", False) else None
 
@@ -243,6 +260,10 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                         prior = df[df.index.normalize() < day]
                         context = {"prior_high": float(prior["high"].max()), "prior_low": float(prior["low"].min())} if not prior.empty else None
                     signal = strat.generate_signal(symbol, bars_slice, context)
+                    if signal and regime_enabled:
+                        want_long = regime_map.get(day.date())
+                        if want_long is not None and ((signal["direction"] == "long") != want_long):
+                            signal = None
                     if signal:
                         strat.on_trade_entered(symbol, signal)
 
