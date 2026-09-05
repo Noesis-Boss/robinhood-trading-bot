@@ -35,7 +35,7 @@ class OrbfvgStrategy:
 
     def _orb_range(self, symbol, bars):
         window = bars[bars.index.time < self.orb_end]
-        if len(window) < 2:
+        if len(window) < 1:
             return None
         return float(window.high.max()), float(window.low.min())
 

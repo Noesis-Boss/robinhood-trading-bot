@@ -113,10 +113,15 @@ execution realism on: 5bps slippage + 5bps spread):
   tiny in absolute terms (~$0.10-0.25/share); the ~$0.15/share round-trip cost
   (spread+slippage) exceeds the target distance. Stops also get tagged by normal
   1-min noise (13/18 stopped).
-- Verdict: fails as specified. Do NOT enable for live. If revisited: widen the
-  stop with an ATR buffer, require a minimum gap size (e.g. >= 0.1% of price),
-  and/or use 5-min FVG candles — but expectations should be low (source video
-  evidence quality 2/10: no verified track record, cherry-picked examples).
+- Verdict: fails as specified. Do NOT enable for live (source video evidence
+  quality 2/10: no verified track record, cherry-picked examples).
+
+5-min FVG variant (2026-09-05, same window, backtest_interval 5m, max_holding 18
+bars = 90 min): 14 trades, 3W/11L (21.4% win), PF 0.07, net -$286.11, gross
+-$21.99 — still negative before costs. Wider stops did not help: 8/11 losses
+were shorts into a rallying month (QQQ 690→733); longs were gross +$62 on 4
+trades but the sample is far too small to call an edge. BOTH timeframes fail;
+strategy closed. Parked, not in rotation, no further variants planned.
 
 Run: `python3 -m src.backtest_runner --strategy orb_fvg --symbols QQQ --start 2026-08-01 --end 2026-08-28 --provider alpaca --json`
 (theta_farming.enabled was true in config.yaml and leaked theta_spread trades
