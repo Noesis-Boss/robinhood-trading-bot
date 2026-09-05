@@ -279,3 +279,9 @@ orb_fvg:
   session_end: "15:45"
   rr_ratio: 2.0
   max_holding_bars: 90
+
+# Market-regime gate for London (paper-only): longs only when SPY > SMA, shorts only below.
+regime_filter:
+  enabled: false
+  symbol: SPY
+  ma_length: 50
