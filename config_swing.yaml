@@ -1,0 +1,16 @@
+# Supply/Demand Swing — JeaFx LTV methodology codified
+# Source: https://youtube.com/watch?v=reyleIzgE3o | plan: ../trading-methodology/PLAN.md
+capital: 10000
+risk_pct: 0.01            # 1.0% fixed per trade — never dynamic
+
+supply_demand_swing:
+  pivot_k: 3              # swing pivot confirmation bars each side (daily)
+  impulse_lookback: 10    # bars to walk back for the origin candle of an impulse
+  min_rr: 2.0             # minimum 1:2 RR or skip the trade
+  max_order_bars: 30      # cancel unfilled limits after this many daily bars
+  zone_expiry_bars: 120   # drop zones untouched this long
+  stop_buffer_pct: 0.001  # small buffer beyond zone low/high for stops
+  weekly_loss_limit: -0.02   # halt new orders for the week at -2%
+  monthly_profit_limit: 0.08 # halt new orders for the month at +8% (lock it)
+
+universe: [SPY, QQQ, AAPL, NVDA, TSLA, META]   # match validated backtest universe

@@ -1,0 +1,26 @@
+{
+  "memories": [
+    {
+      "id": 1788632062513,
+      "text": "orb_fvg 5-min FVG variant also failed: QQQ Aug 2026, 14 trades, 21.4% win, PF 0.07, net -$286, gross -$22 (negative before costs). Losses concentrated in shorts against a rallying month. Both 1m and 5m timeframes fail; orb_fvg closed and parked, no further variants planned. robinhood-trading-bot",
+      "addedAt": "2026-09-05T18:14:22.513Z",
+      "lastSeenAt": "2026-09-05T18:14:22.513Z",
+      "type": "fact",
+      "status": "pending",
+      "confidence": 1,
+      "source": "manual",
+      "tags": []
+    },
+    {
+      "id": 1788632628958,
+      "text": "London 6-month regime check 2026-09-05: Mar +$342 PF1.13, Apr -$44 PF0.98, May -$31 PF0.99, Jun +$754 PF1.32, Jul +$1232 PF1.44, Aug +$113 PF1.10, Sep1-3 -$162. Total 386 trades ~57.8% win in every month, net +$2,204 but concentrated in Jun/Jul. Verdict: thin variance-heavy positive expectancy, keep paper-only. robinhood-trading-bot",
+      "addedAt": "2026-09-05T18:23:48.958Z",
+      "lastSeenAt": "2026-09-05T18:23:48.958Z",
+      "type": "fact",
+      "status": "pending",
+      "confidence": 1,
+      "source": "manual",
+      "tags": []
+    }
+  ]
+}

@@ -1,0 +1,465 @@
+{
+  "universe": [
+    "SPY",
+    "QQQ",
+    "AAPL",
+    "NVDA",
+    "TSLA",
+    "META"
+  ],
+  "period": "3y",
+  "start": "2023-08-22",
+  "end": "2026-08-21",
+  "capital_start": 10000,
+  "equity_end": 13319.1,
+  "breaker_blocks": 0,
+  "metrics": {
+    "trades": 33,
+    "win_rate_pct": 36.4,
+    "avg_rr_winners": 4.26,
+    "profit_factor": 2.44,
+    "total_r": 30.15,
+    "avg_winner_r": 4.26,
+    "avg_loser_r": -1.0,
+    "avg_win_duration_d": 8.1,
+    "avg_loss_duration_d": 8.2,
+    "trades_per_month": 1.5,
+    "months_total": 22,
+    "positive_months_pct": 54.5,
+    "monthly_r": {
+      "2023-10": 1.13,
+      "2024-01": 5.09,
+      "2024-03": -2.0,
+      "2024-04": -2.0,
+      "2024-05": -1.0,
+      "2024-06": -1.0,
+      "2024-08": 8.49,
+      "2024-09": 3.71,
+      "2024-10": -2.0,
+      "2024-11": -1.0,
+      "2024-12": 2.11,
+      "2025-01": -2.0,
+      "2025-04": 9.82,
+      "2025-05": 2.98,
+      "2025-06": 1.88,
+      "2025-07": -1.0,
+      "2025-10": -3.0,
+      "2025-11": -1.0,
+      "2025-12": 2.33,
+      "2026-02": 2.88,
+      "2026-05": 3.17,
+      "2026-07": 2.58
+    },
+    "by_symbol": {
+      "AAPL": {
+        "n": 7,
+        "wr_pct": 28.6
+      },
+      "META": {
+        "n": 5,
+        "wr_pct": 60.0
+      },
+      "NVDA": {
+        "n": 5,
+        "wr_pct": 40.0
+      },
+      "QQQ": {
+        "n": 3,
+        "wr_pct": 33.3
+      },
+      "SPY": {
+        "n": 8,
+        "wr_pct": 12.5
+      },
+      "TSLA": {
+        "n": 5,
+        "wr_pct": 60.0
+      }
+    },
+    "target_kind_mix": {
+      "swing": 3,
+      "zone": 30
+    }
+  },
+  "monte_carlo_base": {
+    "n_sims": 10000,
+    "trades_per_sim": 33,
+    "median_r": 29.8,
+    "p5_r": 3.2,
+    "p95_r": 59.3,
+    "worst_r": -21.9
+  },
+  "monte_carlo_wr_minus_10": {
+    "n_sims": 10000,
+    "trades_per_sim": 33,
+    "median_r": 23.4,
+    "p5_r": -2.0,
+    "p95_r": 52.4,
+    "worst_r": -25.8
+  },
+  "trades": [
+    {
+      "symbol": "SPY",
+      "side": "long",
+      "entry_date": "2023-10-20",
+      "exit_date": "2023-10-23",
+      "duration_days": 1,
+      "rr": 3.394219382341377,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2024-04-04",
+      "exit_date": "2024-05-10",
+      "duration_days": 26,
+      "rr": 21.138405055499522,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2024-05-31",
+      "exit_date": "2024-06-03",
+      "duration_days": 1,
+      "rr": 11.26399674617254,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2024-07-31",
+      "exit_date": "2024-08-02",
+      "duration_days": 2,
+      "rr": 8.487618715794694,
+      "r_multiple": 8.487618715794694,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2024-12-18",
+      "exit_date": "2025-01-22",
+      "duration_days": 21,
+      "rr": 20.824527874344565,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2025-06-23",
+      "exit_date": "2025-06-24",
+      "duration_days": 1,
+      "rr": 12.88448449597826,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2025-10-10",
+      "exit_date": "2025-10-24",
+      "duration_days": 10,
+      "rr": 19.781284328508345,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "SPY",
+      "side": "short",
+      "entry_date": "2025-11-19",
+      "exit_date": "2025-11-26",
+      "duration_days": 5,
+      "rr": 6.115578090427665,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "QQQ",
+      "side": "short",
+      "entry_date": "2024-01-11",
+      "exit_date": "2024-01-18",
+      "duration_days": 4,
+      "rr": 29.80540382536946,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "QQQ",
+      "side": "short",
+      "entry_date": "2024-03-18",
+      "exit_date": "2024-03-21",
+      "duration_days": 3,
+      "rr": 6.195612458750485,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "QQQ",
+      "side": "short",
+      "entry_date": "2024-12-18",
+      "exit_date": "2024-12-19",
+      "duration_days": 1,
+      "rr": 2.106175297550183,
+      "r_multiple": 2.106175297550183,
+      "outcome": "win",
+      "target_kind": "swing"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "long",
+      "entry_date": "2024-01-18",
+      "exit_date": "2024-01-22",
+      "duration_days": 2,
+      "rr": 6.093724991906331,
+      "r_multiple": 6.093724991906331,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "long",
+      "entry_date": "2024-03-19",
+      "exit_date": "2024-03-21",
+      "duration_days": 2,
+      "rr": 2.4870435970067057,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "long",
+      "entry_date": "2024-04-11",
+      "exit_date": "2024-04-18",
+      "duration_days": 5,
+      "rr": 6.623187036753358,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "short",
+      "entry_date": "2024-09-03",
+      "exit_date": "2024-09-19",
+      "duration_days": 12,
+      "rr": 5.433834882789855,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "short",
+      "entry_date": "2024-10-07",
+      "exit_date": "2024-10-09",
+      "duration_days": 2,
+      "rr": 8.366684305476376,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "short",
+      "entry_date": "2025-06-13",
+      "exit_date": "2025-06-16",
+      "duration_days": 1,
+      "rr": 2.8761872312728505,
+      "r_multiple": 2.8761872312728505,
+      "outcome": "win",
+      "target_kind": "swing"
+    },
+    {
+      "symbol": "AAPL",
+      "side": "short",
+      "entry_date": "2026-06-08",
+      "exit_date": "2026-07-09",
+      "duration_days": 21,
+      "rr": 6.909901408419775,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "NVDA",
+      "side": "short",
+      "entry_date": "2024-04-26",
+      "exit_date": "2024-04-30",
+      "duration_days": 2,
+      "rr": 20.97381587745394,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "NVDA",
+      "side": "long",
+      "entry_date": "2024-09-24",
+      "exit_date": "2024-09-26",
+      "duration_days": 2,
+      "rr": 4.709500182464224,
+      "r_multiple": 4.709500182464224,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "NVDA",
+      "side": "short",
+      "entry_date": "2024-11-25",
+      "exit_date": "2025-01-06",
+      "duration_days": 27,
+      "rr": 4.158044965215635,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "NVDA",
+      "side": "short",
+      "entry_date": "2025-10-10",
+      "exit_date": "2025-10-28",
+      "duration_days": 12,
+      "rr": 5.999434164828282,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "NVDA",
+      "side": "long",
+      "entry_date": "2025-12-23",
+      "exit_date": "2025-12-24",
+      "duration_days": 1,
+      "rr": 2.3283135737789493,
+      "r_multiple": 2.3283135737789493,
+      "outcome": "win",
+      "target_kind": "swing"
+    },
+    {
+      "symbol": "TSLA",
+      "side": "short",
+      "entry_date": "2024-10-24",
+      "exit_date": "2024-10-25",
+      "duration_days": 1,
+      "rr": 19.94324023020514,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "TSLA",
+      "side": "short",
+      "entry_date": "2025-10-10",
+      "exit_date": "2025-10-13",
+      "duration_days": 1,
+      "rr": 35.55812852588434,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "TSLA",
+      "side": "short",
+      "entry_date": "2026-01-22",
+      "exit_date": "2026-02-04",
+      "duration_days": 9,
+      "rr": 2.8770487511853005,
+      "r_multiple": 2.8770487511853005,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "TSLA",
+      "side": "long",
+      "entry_date": "2026-04-15",
+      "exit_date": "2026-05-11",
+      "duration_days": 18,
+      "rr": 3.1660287263899427,
+      "r_multiple": 3.1660287263899427,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "TSLA",
+      "side": "short",
+      "entry_date": "2026-06-05",
+      "exit_date": "2026-07-23",
+      "duration_days": 32,
+      "rr": 3.581026340657311,
+      "r_multiple": 3.581026340657311,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "META",
+      "side": "short",
+      "entry_date": "2023-10-24",
+      "exit_date": "2023-10-25",
+      "duration_days": 1,
+      "rr": 2.127006345378525,
+      "r_multiple": 2.127006345378525,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "META",
+      "side": "short",
+      "entry_date": "2024-11-07",
+      "exit_date": "2024-11-12",
+      "duration_days": 3,
+      "rr": 3.014819958696275,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "META",
+      "side": "short",
+      "entry_date": "2025-03-05",
+      "exit_date": "2025-04-03",
+      "duration_days": 21,
+      "rr": 9.824092453265726,
+      "r_multiple": 9.824092453265726,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "META",
+      "side": "long",
+      "entry_date": "2025-05-02",
+      "exit_date": "2025-05-13",
+      "duration_days": 7,
+      "rr": 2.9778068236494235,
+      "r_multiple": 2.9778068236494235,
+      "outcome": "win",
+      "target_kind": "zone"
+    },
+    {
+      "symbol": "META",
+      "side": "short",
+      "entry_date": "2025-07-15",
+      "exit_date": "2025-07-31",
+      "duration_days": 12,
+      "rr": 11.279626448111898,
+      "r_multiple": -1.0,
+      "outcome": "loss",
+      "target_kind": "zone"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+capital: 10000
+risk_pct: 0.02
+max_risk_dollars: 500
+bar_interval: "5m"
+timezone: "America/New_York"
+london_open: "03:00"
+london_close: "08:00"
+ny_open: "08:00"
+ny_close: "12:00"
+
+# Position sizing
+# fractional_shares: true -> long buys use fractional share sizing (e.g. risk a
+#   fixed dollar amount on any stock by buying a fraction of a share).
+#   Shorts stay whole-share only (Robinhood does not support fractional shorts).
+# min_order_value: skip entries whose notional (qty * entry) is below this.
+fractional_shares: true
+min_order_value: 1.0
+
+# Strategy parameters
+min_box_pct: 0.005
+max_box_pct: 0.04
+entry_window_hours: 3
+volume_lookback: 20
+volume_multiplier: 0.8
+directional_bias: true
+trend_filter: true
+trend_lookback: 20
+breakout_strength: 0.75
+rr_ratio: 2.0
+max_holding_bars: 30
+trailing_stop_breakeven: true
+early_exit_reversal: false
+
+# Theta farming (options credit spreads after confirmed breakout)
+theta_farming:
+  enabled: true
+  min_days_to_expiry: 2
+  target_pop: 0.80
+  max_spread_width_pct: 0.02
+  contracts_per_trade: 1
+  max_risk_per_trade_pct: 0.02
+
+# Universe: core ETFs/mega-caps + low-priced liquid optionable names for variety
+symbols:
+  # Core (higher per-share — fractional sizing lets small accounts participate)
+  - "SPY"
+  - "QQQ"
+  - "AAPL"
+  - "TSLA"
+  - "NVDA"
+  # Low-priced, high-liquidity, optionable (whole-share friendly + weeklies for theta)
+  - "SOFI"
+  - "F"
+  - "AAL"
+  - "MARA"
+  - "RIVN"
+  - "NIO"
+  - "RBLX"
+  - "DKNG"
+
+risk_free_rate: 0.0
+robinhood:
+  enabled: false

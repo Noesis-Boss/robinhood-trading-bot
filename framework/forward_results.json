@@ -1,0 +1,56 @@
+[
+  {
+    "trade_count": 0,
+    "win_rate": 0,
+    "profit_factor": 0,
+    "total_pnl": 0,
+    "final_equity": 100.0,
+    "total_return_pct": 0,
+    "id": "london_021",
+    "strategy": "london",
+    "params": {
+      "breakout_strength": 0.3,
+      "rr_ratio": 2.0,
+      "max_holding_bars": 30,
+      "volume_multiplier": 0.8
+    },
+    "capital": 100.0,
+    "days_tested": 10
+  },
+  {
+    "trade_count": 0,
+    "win_rate": 0,
+    "profit_factor": 0,
+    "total_pnl": 0,
+    "final_equity": 100.0,
+    "total_return_pct": 0,
+    "id": "london_025",
+    "strategy": "london",
+    "params": {
+      "breakout_strength": 0.3,
+      "rr_ratio": 2.0,
+      "max_holding_bars": 45,
+      "volume_multiplier": 0.8
+    },
+    "capital": 100.0,
+    "days_tested": 10
+  },
+  {
+    "trade_count": 0,
+    "win_rate": 0,
+    "profit_factor": 0,
+    "total_pnl": 0,
+    "final_equity": 100.0,
+    "total_return_pct": 0,
+    "id": "london_029",
+    "strategy": "london",
+    "params": {
+      "breakout_strength": 0.3,
+      "rr_ratio": 2.0,
+      "max_holding_bars": 60,
+      "volume_multiplier": 0.8
+    },
+    "capital": 100.0,
+    "days_tested": 10
+  }
+]

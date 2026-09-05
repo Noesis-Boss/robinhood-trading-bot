@@ -1,0 +1,144 @@
+{
+  "aggregate": {
+    "symbols": [
+      "SPY",
+      "QQQ",
+      "AAPL",
+      "TSLA",
+      "NVDA",
+      "SOFI",
+      "F",
+      "AAL",
+      "MARA",
+      "RIVN",
+      "NIO",
+      "RBLX",
+      "DKNG"
+    ],
+    "start": "2026-08-01",
+    "end": "2026-08-08",
+    "capital_per_symbol": 300.0,
+    "total_trades": 59,
+    "total_pnl": 0.18,
+    "symbols_completed": 13
+  },
+  "symbols": [
+    {
+      "symbol": "QQQ",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: QQQ\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $1.08\nWins: 3 | Losses: 2\nWin rate: 60.0%\nAvg win: $0.42\nAvg loss: $0.09\nProfit factor: 7.00\n  target_hit: 3\n  stop_loss: 2\n\n  2026-08-03 QQQ long 0.4297sh entry=$698.13 exit=$698.22 P&L=$0.04 (target_hit)\n  2026-08-04 QQQ long 0.4148sh entry=$723.38 exit=$723.1 P&L=$-0.12 (stop_loss)\n  2026-08-05 QQQ short 1sh entry=$723.64 exit=$722.92 P&L=$0.72 (target_hit)\n  2026-08-06 QQQ long 0.4194sh entry=$716.885 exit=$716.74 P&L=$-0.06 (stop_loss)\n  2026-08-07 QQQ short 1sh entry=$718.7 exit=$718.2 P&L=$0.50 (target_hit)\n============================================================\n2026-08-10 14:23:20,151 [INFO] Downloading QQQ ...\n2026-08-10 14:23:22,333 [INFO] Cash balance: $300.04 | Capital: $300.04\n2026-08-10 14:23:22,334 [INFO] Logged trade: long 0.4297 QQQ P&L=$0.04\n2026-08-10 14:23:32,237 [INFO] Cash balance: $299.92 | Capital: $299.92\n2026-08-10 14:23:32,238 [INFO] Logged trade: long 0.4148 QQQ P&L=$-0.12\n2026-08-10 14:23:34,833 [INFO] Cash balance: $300.64 | Capital: $300.64\n2026-08-10 14:23:34,833 [INFO] Logged trade: short 1 QQQ P&L=$0.72\n2026-08-10 14:23:40,939 [INFO] Cash balance: $300.58 | Capital: $300.58\n2026-08-10 14:23:40,939 [INFO] Logged trade: long 0.4194 QQQ P&L=$-0.06\n2026-08-10 14:23:47,274 [INFO] Cash balance: $301.08 | Capital: $301.08\n2026-08-10 14:23:47,274 [INFO] Logged trade: short 1 QQQ P&L=$0.50\n",
+      "trades": 5,
+      "pnl": 1.08,
+      "win_rate": 60.0,
+      "profit_factor": 7.0
+    },
+    {
+      "symbol": "SPY",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: SPY\nTotal trades: 3\n============================================================\nClosed trades: 3\nTotal P&L: $-0.18\nWins: 2 | Losses: 1\nWin rate: 66.7%\nAvg win: $0.22\nAvg loss: $0.62\nProfit factor: 0.71\n  target_hit: 2\n  stop_loss: 1\n\n  2026-08-04 SPY long 0.3884sh entry=$772.44 exit=$772.73 P&L=$0.11 (target_hit)\n  2026-08-05 SPY short 1sh entry=$776.06 exit=$775.73 P&L=$0.33 (target_hit)\n  2026-08-06 SPY short 1sh entry=$770.11 exit=$770.73 P&L=$-0.62 (stop_loss)\n============================================================\n2026-08-10 14:23:20,150 [INFO] Downloading SPY ...\n2026-08-10 14:23:33,942 [INFO] Cash balance: $300.11 | Capital: $300.11\n2026-08-10 14:23:33,942 [INFO] Logged trade: long 0.3884 SPY P&L=$0.11\n2026-08-10 14:23:34,190 [INFO] Cash balance: $300.44 | Capital: $300.44\n2026-08-10 14:23:34,190 [INFO] Logged trade: short 1 SPY P&L=$0.33\n2026-08-10 14:23:41,245 [INFO] Cash balance: $299.82 | Capital: $299.82\n2026-08-10 14:23:41,246 [INFO] Logged trade: short 1 SPY P&L=$-0.62\n",
+      "trades": 3,
+      "pnl": -0.18,
+      "win_rate": 66.7,
+      "profit_factor": 0.71
+    },
+    {
+      "symbol": "TSLA",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: TSLA\nTotal trades: 4\n============================================================\nClosed trades: 4\nTotal P&L: $0.16\nWins: 2 | Losses: 2\nWin rate: 50.0%\nAvg win: $0.32\nAvg loss: $0.24\nProfit factor: 1.33\n  stop_loss: 2\n  target_hit: 2\n\n  2026-08-03 TSLA short 1sh entry=$320.3 exit=$320.52 P&L=$-0.22 (stop_loss)\n  2026-08-04 TSLA short 1sh entry=$323.94 exit=$323.68 P&L=$0.26 (target_hit)\n  2026-08-06 TSLA long 0.9355sh entry=$320.71 exit=$321.12 P&L=$0.38 (target_hit)\n  2026-08-07 TSLA short 1sh entry=$327.54 exit=$327.8 P&L=$-0.26 (stop_loss)\n============================================================\n2026-08-10 14:23:20,149 [INFO] Downloading TSLA ...\n2026-08-10 14:23:23,067 [INFO] Cash balance: $299.78 | Capital: $299.78\n2026-08-10 14:23:23,067 [INFO] Logged trade: short 1 TSLA P&L=$-0.22\n2026-08-10 14:23:28,277 [INFO] Cash balance: $300.04 | Capital: $300.04\n2026-08-10 14:23:28,278 [INFO] Logged trade: short 1 TSLA P&L=$0.26\n2026-08-10 14:23:41,192 [INFO] Cash balance: $300.42 | Capital: $300.42\n2026-08-10 14:23:41,193 [INFO] Logged trade: long 0.9355 TSLA P&L=$0.38\n2026-08-10 14:23:52,012 [INFO] Cash balance: $300.16 | Capital: $300.16\n2026-08-10 14:23:52,012 [INFO] Logged trade: short 1 TSLA P&L=$-0.26\n",
+      "trades": 4,
+      "pnl": 0.16,
+      "win_rate": 50.0,
+      "profit_factor": 1.33
+    },
+    {
+      "symbol": "AAPL",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: AAPL\nTotal trades: 4\n============================================================\nClosed trades: 4\nTotal P&L: $0.04\nWins: 1 | Losses: 3\nWin rate: 25.0%\nAvg win: $0.30\nAvg loss: $0.09\nProfit factor: 1.15\n  stop_loss: 3\n  target_hit: 1\n\n  2026-08-04 AAPL long 0.982sh entry=$305.49 exit=$305.4 P&L=$-0.09 (stop_loss)\n  2026-08-05 AAPL long 0.9687sh entry=$309.6 exit=$309.49 P&L=$-0.11 (stop_loss)\n  2026-08-06 AAPL short 1sh entry=$312.87 exit=$312.57 P&L=$0.30 (target_hit)\n  2026-08-07 AAPL long 0.9603sh entry=$312.52 exit=$312.46 P&L=$-0.06 (stop_loss)\n============================================================\n2026-08-10 14:23:20,149 [INFO] Downloading AAPL ...\n2026-08-10 14:23:28,314 [INFO] Cash balance: $299.91 | Capital: $299.91\n2026-08-10 14:23:28,314 [INFO] Logged trade: long 0.982 AAPL P&L=$-0.09\n2026-08-10 14:23:37,896 [INFO] Cash balance: $299.81 | Capital: $299.81\n2026-08-10 14:23:37,896 [INFO] Logged trade: long 0.9687 AAPL P&L=$-0.11\n2026-08-10 14:23:41,926 [INFO] Cash balance: $300.11 | Capital: $300.11\n2026-08-10 14:23:41,926 [INFO] Logged trade: short 1 AAPL P&L=$0.30\n2026-08-10 14:23:52,210 [INFO] Cash balance: $300.05 | Capital: $300.05\n2026-08-10 14:23:52,211 [INFO] Logged trade: long 0.9603 AAPL P&L=$-0.06\n",
+      "trades": 4,
+      "pnl": 0.04,
+      "win_rate": 25.0,
+      "profit_factor": 1.15
+    },
+    {
+      "symbol": "F",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: F\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $-0.30\nWins: 2 | Losses: 2\nWin rate: 40.0%\nAvg win: $0.21\nAvg loss: $0.36\nProfit factor: 0.59\n  stop_loss: 3\n  target_hit: 2\n\n  2026-08-03 F short 20sh entry=$14.865 exit=$14.88 P&L=$-0.20 (stop_loss)\n  2026-08-04 F short 1.0sh entry=$14.075 exit=$14.07 P&L=$0.00 (stop_loss)\n  2026-08-05 F short 21sh entry=$14.25 exit=$14.28 P&L=$-0.53 (stop_loss)\n  2026-08-06 F short 21sh entry=$13.995 exit=$13.99 P&L=$0.11 (target_hit)\n  2026-08-07 F long 21.3158sh entry=$14.045 exit=$14.06 P&L=$0.32 (target_hit)\n============================================================\n2026-08-10 14:23:55,264 [INFO] Downloading F ...\n2026-08-10 14:23:56,009 [INFO] Cash balance: $299.80 | Capital: $299.80\n2026-08-10 14:23:56,010 [INFO] Logged trade: short 20 F P&L=$-0.20\n2026-08-10 14:24:02,178 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:24:02,179 [INFO] Cash balance: $299.80 | Capital: $299.80\n2026-08-10 14:24:02,179 [INFO] Logged trade: short 1.0 F P&L=$0.00\n2026-08-10 14:24:08,179 [INFO] Cash balance: $299.27 | Capital: $299.27\n2026-08-10 14:24:08,179 [INFO] Logged trade: short 21 F P&L=$-0.53\n2026-08-10 14:24:14,142 [INFO] Cash balance: $299.38 | Capital: $299.38\n2026-08-10 14:24:14,142 [INFO] Logged trade: short 21 F P&L=$0.11\n2026-08-10 14:24:24,480 [INFO] Cash balance: $299.70 | Capital: $299.70\n2026-08-10 14:24:24,541 [INFO] Logged trade: long 21.3158 F P&L=$0.32\n",
+      "trades": 5,
+      "pnl": -0.3,
+      "win_rate": 40.0,
+      "profit_factor": 0.59
+    },
+    {
+      "symbol": "AAL",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: AAL\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $0.27\nWins: 1 | Losses: 3\nWin rate: 20.0%\nAvg win: $1.53\nAvg loss: $0.42\nProfit factor: 1.21\n  stop_loss: 4\n  target_hit: 1\n\n  2026-08-03 AAL long 18.4729sh entry=$16.24 exit=$16.21 P&L=$-0.46 (stop_loss)\n  2026-08-04 AAL short 18sh entry=$16.54 exit=$16.45 P&L=$1.53 (target_hit)\n  2026-08-05 AAL long 17.7621sh entry=$16.95 exit=$16.93 P&L=$-0.44 (stop_loss)\n  2026-08-06 AAL long 18.2418sh entry=$16.48 exit=$16.46 P&L=$-0.36 (stop_loss)\n  2026-08-07 AAL short 1.0sh entry=$15.92 exit=$15.92 P&L=$0.00 (stop_loss)\n============================================================\n2026-08-10 14:23:55,845 [INFO] Downloading AAL ...\n2026-08-10 14:23:56,011 [INFO] Cash balance: $299.54 | Capital: $299.54\n2026-08-10 14:23:56,012 [INFO] Logged trade: long 18.4729 AAL P&L=$-0.46\n2026-08-10 14:24:01,401 [INFO] Cash balance: $301.07 | Capital: $301.07\n2026-08-10 14:24:01,401 [INFO] Logged trade: short 18 AAL P&L=$1.53\n2026-08-10 14:24:07,991 [INFO] Cash balance: $300.62 | Capital: $300.62\n2026-08-10 14:24:07,991 [INFO] Logged trade: long 17.7621 AAL P&L=$-0.44\n2026-08-10 14:24:14,433 [INFO] Cash balance: $300.26 | Capital: $300.26\n2026-08-10 14:24:14,434 [INFO] Logged trade: long 18.2418 AAL P&L=$-0.36\n2026-08-10 14:24:21,191 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:24:21,191 [INFO] Cash balance: $300.26 | Capital: $300.26\n2026-08-10 14:24:21,191 [INFO] Logged trade: short 1.0 AAL P&L=$0.00\n",
+      "trades": 5,
+      "pnl": 0.27,
+      "win_rate": 20.0,
+      "profit_factor": 1.21
+    },
+    {
+      "symbol": "SOFI",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: SOFI\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $1.16\nWins: 4 | Losses: 1\nWin rate: 80.0%\nAvg win: $0.33\nAvg loss: $0.16\nProfit factor: 8.25\n  target_hit: 4\n  stop_loss: 1\n\n  2026-08-03 SOFI long 17.3762sh entry=$17.265 exit=$17.28 P&L=$0.26 (target_hit)\n  2026-08-04 SOFI long 16.4211sh entry=$18.285 exit=$18.31 P&L=$0.41 (target_hit)\n  2026-08-05 SOFI short 16sh entry=$18.47 exit=$18.48 P&L=$-0.16 (stop_loss)\n  2026-08-06 SOFI short 16sh entry=$18.26 exit=$18.24 P&L=$0.40 (target_hit)\n  2026-08-07 SOFI long 16.5609sh entry=$18.17 exit=$18.19 P&L=$0.25 (target_hit)\n============================================================\n2026-08-10 14:23:55,179 [INFO] Downloading SOFI ...\n2026-08-10 14:23:56,067 [INFO] Cash balance: $300.26 | Capital: $300.26\n2026-08-10 14:23:56,068 [INFO] Logged trade: long 17.3762 SOFI P&L=$0.26\n2026-08-10 14:24:02,210 [INFO] Cash balance: $300.67 | Capital: $300.67\n2026-08-10 14:24:02,210 [INFO] Logged trade: long 16.4211 SOFI P&L=$0.41\n2026-08-10 14:24:11,958 [INFO] Cash balance: $300.51 | Capital: $300.51\n2026-08-10 14:24:11,958 [INFO] Logged trade: short 16 SOFI P&L=$-0.16\n2026-08-10 14:24:17,443 [INFO] Cash balance: $300.91 | Capital: $300.91\n2026-08-10 14:24:17,444 [INFO] Logged trade: short 16 SOFI P&L=$0.40\n2026-08-10 14:24:24,406 [INFO] Cash balance: $301.16 | Capital: $301.16\n2026-08-10 14:24:24,535 [INFO] Logged trade: long 16.5609 SOFI P&L=$0.25\n",
+      "trades": 5,
+      "pnl": 1.16,
+      "win_rate": 80.0,
+      "profit_factor": 8.25
+    },
+    {
+      "symbol": "NVDA",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: NVDA\nTotal trades: 3\n============================================================\nClosed trades: 3\nTotal P&L: $0.85\nWins: 1 | Losses: 1\nWin rate: 33.3%\nAvg win: $0.89\nAvg loss: $0.04\nProfit factor: 22.25\n  target_hit: 1\n  eod_close: 1\n  stop_loss: 1\n\n  2026-08-04 NVDA short 1sh entry=$210.12 exit=$209.23 P&L=$0.89 (target_hit)\n  N/A NVDA long 1.3686sh entry=$219.85 exit=$219.85 P&L=$0.00 (eod_close)\n  2026-08-07 NVDA long 1.3455sh entry=$223.63 exit=$223.6 P&L=$-0.04 (stop_loss)\n============================================================\n2026-08-10 14:23:54,417 [INFO] Downloading NVDA ...\n2026-08-10 14:24:02,122 [INFO] Cash balance: $300.89 | Capital: $300.89\n2026-08-10 14:24:02,122 [INFO] Logged trade: short 1 NVDA P&L=$0.89\n2026-08-10 14:24:22,395 [INFO] Cash balance: $300.89 | Capital: $300.89\n2026-08-10 14:24:22,396 [INFO] Logged trade: long 1.3686 NVDA P&L=$0.00\n2026-08-10 14:24:24,053 [INFO] Cash balance: $300.85 | Capital: $300.85\n2026-08-10 14:24:24,053 [INFO] Logged trade: long 1.3455 NVDA P&L=$-0.04\n",
+      "trades": 3,
+      "pnl": 0.85,
+      "win_rate": 33.3,
+      "profit_factor": 22.25
+    },
+    {
+      "symbol": "NIO",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: NIO\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $0.31\nWins: 2 | Losses: 1\nWin rate: 40.0%\nAvg win: $0.31\nAvg loss: $0.31\nProfit factor: 2.00\n  target_hit: 3\n  stop_loss: 2\n\n  2026-08-03 NIO short 62sh entry=$4.775 exit=$4.78 P&L=$-0.31 (stop_loss)\n  2026-08-04 NIO long 62.7623sh entry=$4.775 exit=$4.78 P&L=$0.31 (target_hit)\n  2026-08-05 NIO long 62.9599sh entry=$4.765 exit=$4.77 P&L=$0.31 (target_hit)\n  2026-08-06 NIO short 1.0sh entry=$4.58 exit=$4.58 P&L=$0.00 (stop_loss)\n  2026-08-07 NIO short 1.0sh entry=$4.69 exit=$4.69 P&L=$0.00 (target_hit)\n============================================================\n2026-08-10 14:24:28,938 [INFO] Downloading NIO ...\n2026-08-10 14:24:29,002 [INFO] Cash balance: $299.69 | Capital: $299.69\n2026-08-10 14:24:29,002 [INFO] Logged trade: short 62 NIO P&L=$-0.31\n2026-08-10 14:24:32,258 [INFO] Cash balance: $300.00 | Capital: $300.00\n2026-08-10 14:24:32,258 [INFO] Logged trade: long 62.7623 NIO P&L=$0.31\n2026-08-10 14:24:36,220 [INFO] Cash balance: $300.32 | Capital: $300.32\n2026-08-10 14:24:36,221 [INFO] Logged trade: long 62.9599 NIO P&L=$0.31\n2026-08-10 14:24:38,368 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:24:38,369 [INFO] Cash balance: $300.32 | Capital: $300.32\n2026-08-10 14:24:38,369 [INFO] Logged trade: short 1.0 NIO P&L=$0.00\n2026-08-10 14:24:41,893 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:24:41,894 [INFO] Cash balance: $300.32 | Capital: $300.32\n2026-08-10 14:24:41,894 [INFO] Logged trade: short 1.0 NIO P&L=$0.00\n",
+      "trades": 5,
+      "pnl": 0.31,
+      "win_rate": 40.0,
+      "profit_factor": 2.0
+    },
+    {
+      "symbol": "RIVN",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: RIVN\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $-0.58\nWins: 2 | Losses: 3\nWin rate: 40.0%\nAvg win: $0.24\nAvg loss: $0.35\nProfit factor: 0.45\n  stop_loss: 3\n  target_hit: 2\n\n  2026-08-03 RIVN long 19.274sh entry=$15.565 exit=$15.54 P&L=$-0.58 (stop_loss)\n  2026-08-04 RIVN long 18.8791sh entry=$15.86 exit=$15.86 P&L=$0.09 (target_hit)\n  2026-08-05 RIVN short 19sh entry=$15.51 exit=$15.53 P&L=$-0.29 (stop_loss)\n  2026-08-06 RIVN long 19.3052sh entry=$15.5 exit=$15.52 P&L=$0.39 (target_hit)\n  2026-08-07 RIVN long 18.6852sh entry=$16.035 exit=$16.02 P&L=$-0.19 (stop_loss)\n============================================================\n2026-08-10 14:24:27,119 [INFO] Downloading RIVN ...\n2026-08-10 14:24:27,376 [INFO] Cash balance: $299.42 | Capital: $299.42\n2026-08-10 14:24:27,376 [INFO] Logged trade: long 19.274 RIVN P&L=$-0.58\n2026-08-10 14:24:34,863 [INFO] Cash balance: $299.52 | Capital: $299.52\n2026-08-10 14:24:34,864 [INFO] Logged trade: long 18.8791 RIVN P&L=$0.09\n2026-08-10 14:24:38,951 [INFO] Cash balance: $299.23 | Capital: $299.23\n2026-08-10 14:24:38,951 [INFO] Logged trade: short 19 RIVN P&L=$-0.29\n2026-08-10 14:24:44,870 [INFO] Cash balance: $299.62 | Capital: $299.62\n2026-08-10 14:24:44,871 [INFO] Logged trade: long 19.3052 RIVN P&L=$0.39\n2026-08-10 14:24:51,860 [INFO] Cash balance: $299.43 | Capital: $299.43\n2026-08-10 14:24:51,860 [INFO] Logged trade: long 18.6852 RIVN P&L=$-0.19\n",
+      "trades": 5,
+      "pnl": -0.58,
+      "win_rate": 40.0,
+      "profit_factor": 0.45
+    },
+    {
+      "symbol": "MARA",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: MARA\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $-0.21\nWins: 2 | Losses: 3\nWin rate: 40.0%\nAvg win: $1.15\nAvg loss: $0.83\nProfit factor: 0.92\n  stop_loss: 3\n  target_hit: 2\n\n  2026-08-03 MARA long 25.5864sh entry=$11.725 exit=$11.77 P&L=$1.15 (target_hit)\n  2026-08-04 MARA short 26sh entry=$11.52 exit=$11.53 P&L=$-0.13 (stop_loss)\n  2026-08-05 MARA long 25.4134sh entry=$11.845 exit=$11.89 P&L=$1.14 (target_hit)\n  2026-08-06 MARA short 27sh entry=$10.98 exit=$10.99 P&L=$-0.27 (stop_loss)\n  2026-08-07 MARA short 30sh entry=$9.975 exit=$10.04 P&L=$-2.10 (stop_loss)\n============================================================\n2026-08-10 14:24:26,072 [INFO] Downloading MARA ...\n2026-08-10 14:24:27,127 [INFO] Cash balance: $301.15 | Capital: $301.15\n2026-08-10 14:24:27,128 [INFO] Logged trade: long 25.5864 MARA P&L=$1.15\n2026-08-10 14:24:32,383 [INFO] Cash balance: $301.02 | Capital: $301.02\n2026-08-10 14:24:32,384 [INFO] Logged trade: short 26 MARA P&L=$-0.13\n2026-08-10 14:24:38,367 [INFO] Cash balance: $302.16 | Capital: $302.16\n2026-08-10 14:24:38,367 [INFO] Logged trade: long 25.4134 MARA P&L=$1.14\n2026-08-10 14:24:47,036 [INFO] Cash balance: $301.89 | Capital: $301.89\n2026-08-10 14:24:47,037 [INFO] Logged trade: short 27 MARA P&L=$-0.27\n2026-08-10 14:24:51,887 [INFO] Cash balance: $299.79 | Capital: $299.79\n2026-08-10 14:24:51,888 [INFO] Logged trade: short 30 MARA P&L=$-2.10\n",
+      "trades": 5,
+      "pnl": -0.21,
+      "win_rate": 40.0,
+      "profit_factor": 0.92
+    },
+    {
+      "symbol": "RBLX",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: RBLX\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $-0.24\nWins: 2 | Losses: 2\nWin rate: 40.0%\nAvg win: $0.36\nAvg loss: $0.48\nProfit factor: 0.75\n  stop_loss: 3\n  target_hit: 2\n\n  2026-08-03 RBLX short 8sh entry=$36.2 exit=$36.16 P&L=$0.32 (target_hit)\n  2026-08-04 RBLX long 8.084sh entry=$37.15 exit=$37.2 P&L=$0.40 (target_hit)\n  2026-08-05 RBLX short 8sh entry=$36.965 exit=$37.06 P&L=$-0.76 (stop_loss)\n  2026-08-06 RBLX long 8.149sh entry=$36.81 exit=$36.78 P&L=$-0.20 (stop_loss)\n  2026-08-07 RBLX short 1.0sh entry=$36.635 exit=$36.63 P&L=$0.00 (stop_loss)\n============================================================\n2026-08-10 14:24:30,016 [INFO] Downloading RBLX ...\n2026-08-10 14:24:30,379 [INFO] Cash balance: $300.32 | Capital: $300.32\n2026-08-10 14:24:30,379 [INFO] Logged trade: short 8 RBLX P&L=$0.32\n2026-08-10 14:24:36,444 [INFO] Cash balance: $300.72 | Capital: $300.72\n2026-08-10 14:24:36,444 [INFO] Logged trade: long 8.084 RBLX P&L=$0.40\n2026-08-10 14:24:43,002 [INFO] Cash balance: $299.96 | Capital: $299.96\n2026-08-10 14:24:43,003 [INFO] Logged trade: short 8 RBLX P&L=$-0.76\n2026-08-10 14:24:51,890 [INFO] Cash balance: $299.76 | Capital: $299.76\n2026-08-10 14:24:51,890 [INFO] Logged trade: long 8.149 RBLX P&L=$-0.20\n2026-08-10 14:24:55,217 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:24:55,217 [INFO] Cash balance: $299.76 | Capital: $299.76\n2026-08-10 14:24:55,217 [INFO] Logged trade: short 1.0 RBLX P&L=$0.00\n",
+      "trades": 5,
+      "pnl": -0.24,
+      "win_rate": 40.0,
+      "profit_factor": 0.75
+    },
+    {
+      "symbol": "DKNG",
+      "returncode": 0,
+      "output": "\n============================================================\nBacktest Results: 2026-08-01 to 2026-08-08\nSymbols: DKNG\nTotal trades: 5\n============================================================\nClosed trades: 5\nTotal P&L: $-2.18\nWins: 2 | Losses: 2\nWin rate: 40.0%\nAvg win: $0.19\nAvg loss: $1.28\nProfit factor: 0.15\n  stop_loss: 3\n  target_hit: 2\n\n  2026-08-03 DKNG short 12sh entry=$23.45 exit=$23.57 P&L=$-1.44 (stop_loss)\n  2026-08-04 DKNG long 12.5604sh entry=$23.77 exit=$23.79 P&L=$0.25 (target_hit)\n  2026-08-05 DKNG long 13.1984sh entry=$22.64 exit=$22.55 P&L=$-1.12 (stop_loss)\n  2026-08-06 DKNG short 1.0sh entry=$21.485 exit=$21.48 P&L=$0.00 (stop_loss)\n  2026-08-07 DKNG long 12.5343sh entry=$23.75 exit=$23.76 P&L=$0.13 (target_hit)\n============================================================\n2026-08-10 14:24:45,339 [INFO] Downloading DKNG ...\n2026-08-10 14:24:45,382 [INFO] Cash balance: $298.56 | Capital: $298.56\n2026-08-10 14:24:45,382 [INFO] Logged trade: short 12 DKNG P&L=$-1.44\n2026-08-10 14:24:52,877 [INFO] Cash balance: $298.81 | Capital: $298.81\n2026-08-10 14:24:52,877 [INFO] Logged trade: long 12.5604 DKNG P&L=$0.25\n2026-08-10 14:24:58,235 [INFO] Cash balance: $297.69 | Capital: $297.69\n2026-08-10 14:24:58,236 [INFO] Logged trade: long 13.1984 DKNG P&L=$-1.12\n2026-08-10 14:25:02,887 [WARNING] Zero risk per share \u2014 entry equals stop\n2026-08-10 14:25:02,887 [INFO] Cash balance: $297.69 | Capital: $297.69\n2026-08-10 14:25:02,888 [INFO] Logged trade: short 1.0 DKNG P&L=$0.00\n2026-08-10 14:25:08,109 [INFO] Cash balance: $297.81 | Capital: $297.81\n2026-08-10 14:25:08,109 [INFO] Logged trade: long 12.5343 DKNG P&L=$0.13\n",
+      "trades": 5,
+      "pnl": -2.18,
+      "win_rate": 40.0,
+      "profit_factor": 0.15
+    }
+  ]
+}

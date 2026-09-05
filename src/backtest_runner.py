@@ -482,6 +482,10 @@ def main():
             block["eps"] = eps_map
         for sym, value in resolved.items():
             logging.info("Auto-resolved trailing EPS for %s: %.2f", sym, value)
+        no_eps = [s for s, v in eps_map.items() if not v]
+        if no_eps:
+            logging.warning("Skipping %s: no trailing EPS available (ETFs/funds cannot anchor an EPS line)", ", ".join(no_eps))
+            args.symbols = [s for s in args.symbols if s not in no_eps]
     if args.capital:
         config["capital"] = args.capital
         config["max_risk_dollars"] = args.capital * config.get("risk_pct", 0.02)
