@@ -30,6 +30,9 @@ DEFAULTS = {
     "min_days_between_entries": 21,
     "max_contracts": 5,
     "min_yield_annual_pct": 5.0,
+    "max_distance_to_line_pct": 2.0,
+    "rsi_period": 14,
+    "rsi_max": 40.0,
 }
 
 
@@ -79,6 +82,18 @@ class EpsLinePutSellingStrategy:
             return self.risk.capital * self.cfg["margin_leverage"]
         return self.risk.capital
 
+    @staticmethod
+    def _rsi(closes, period):
+        if len(closes) < period + 1:
+            return None
+        deltas = [float(b) - float(a) for a, b in zip(closes[-(period + 1):], closes[-period:])]
+        gains = sum(d for d in deltas if d > 0) / period
+        losses = -sum(d for d in deltas if d < 0) / period
+        if losses == 0:
+            return None if gains == 0 else 100.0
+        rs = gains / losses
+        return 100.0 - 100.0 / (1.0 + rs)
+
     def generate_trade(self, symbol: str, day_data):
         if len(day_data) < 2:
             return None
@@ -92,6 +107,13 @@ class EpsLinePutSellingStrategy:
             return None
         eps_line = eps * self.cfg["target_pe"]
         if close > eps_line * (1 + self.cfg["entry_tolerance_pct"]):
+            return None
+        distance_pct = abs(close - eps_line) / eps_line * 100.0
+        if distance_pct > self.cfg["max_distance_to_line_pct"]:
+            return None
+        closes = list(day_data["close"].iloc[-(self.cfg["rsi_period"] + 1):])
+        rsi = self._rsi(closes, self.cfg["rsi_period"])
+        if rsi is not None and rsi > self.cfg["rsi_max"]:
             return None
 
         strike = eps_line * self.cfg["strike_pct_of_eps_line"]

@@ -72,7 +72,10 @@ Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and
 unrealized_mtm (Black-Scholes mark-to-market of open puts at the window-end close).
 Entry gate: `min_yield_annual_pct` (default 5.0) blocks entries whose annualized yield
 (premium/strike, DTE-adjusted) is below the floor — dead-money low-IV entries never fire;
-each trade reports `yield_annual_pct`.
+each trade reports `yield_annual_pct`. Entry-quality gate (2026-09-05):
+`max_distance_to_line_pct` (default 2.0) requires price within 2% of the EPS line, and
+`rsi_period`/`rsi_max` (14/40.0) require RSI below 40 on the entry day — deep-ITM or
+recently-rallied entries never fire. Both are Strategy Lab UI params.
 Zero-param runs work: config.yaml `eps_line_put_selling` seed (SPY/QQQ/T/VZ) + auto-resolve
 of missing trailing EPS via yfinance in the runner.
 

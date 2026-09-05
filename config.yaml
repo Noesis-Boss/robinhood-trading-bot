@@ -250,4 +250,7 @@ eps_line_put_selling:
   max_collateral_pct: 0.30
   max_contracts: 5
   min_yield_annual_pct: 5.0
+  max_distance_to_line_pct: 2.0
+  rsi_period: 14
+  rsi_max: 40.0
   securing: "cash"

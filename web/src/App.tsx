@@ -193,6 +193,9 @@ const strategies = {
       ["max_collateral_pct", "Max collateral %", 0.30],
       ["min_days_between_entries", "Min days between entries", 21],
       ["min_yield_annual_pct", "Min annual yield %", 5.0],
+      ["max_distance_to_line_pct", "Max distance to line %", 2.0],
+      ["rsi_period", "RSI period", 14],
+      ["rsi_max", "RSI max", 40],
       ["securing", "Securing (cash|margin)", "cash"],
     ],
   },
@@ -517,6 +520,28 @@ function Results({ data }: { data: any }) {
           label="Ending capital"
           value={`$${data.final_capital.toFixed(2)}`}
         />
+        {data.strategy === "eps_line_put_selling" && (
+          <>
+            <Metric
+              label="Premium collected"
+              value={`$${(data.premium_collected ?? 0).toLocaleString()}`}
+              tone="green"
+            />
+            <Metric
+              label="Open max liability"
+              value={`$${(data.open_max_liability ?? 0).toLocaleString()}`}
+            />
+            <Metric
+              label="Unrealized MTM"
+              value={`${(data.unrealized_mtm ?? 0) >= 0 ? "+" : ""}$${(data.unrealized_mtm ?? 0).toFixed(2)}`}
+              tone={(data.unrealized_mtm ?? 0) >= 0 ? "green" : "red"}
+            />
+            <Metric
+              label="Open positions"
+              value={`${data.open_positions ?? 0} · ${data.securing ?? "cash"} · ${data.dte ?? "—"}dte`}
+            />
+          </>
+        )}
       </div>
     </>
   );

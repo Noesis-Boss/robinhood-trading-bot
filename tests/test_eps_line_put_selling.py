@@ -105,3 +105,29 @@ def test_yield_gate_blocks_low_premium():
     trade = high.generate_trade("SPY", frame(295.0))
     assert trade is not None
     assert trade["yield_annual_pct"] >= 5.0
+
+
+def series(closes, date="2026-08-03"):
+    index = pd.date_range(f"{date} 09:30", periods=len(closes), freq="5min", tz="America/New_York")
+    return pd.DataFrame({"close": closes}, index=index)
+
+
+def test_gate_blocks_far_from_eps_line():
+    strat = make_strategy()
+    # eps 6.67 x 15 = 100.05 line; close 103.05 is 3% away -> blocked
+    assert strat.generate_trade("SPY", series([103.05] * 20)) is None
+    # within 2% band -> allowed
+    assert strat.generate_trade("SPY", series([100.05] * 20)) is not None
+
+
+def test_gate_blocks_high_rsi():
+    strat = make_strategy()
+    rising = [100.0 + i for i in range(16)]
+    assert strat.generate_trade("SPY", series(rising)) is None
+    falling = [100.05 - i * 0.1 for i in range(16)]
+    assert strat.generate_trade("SPY", series(falling)) is not None
+
+
+def test_gate_short_history_skips_rsi():
+    strat = make_strategy()
+    assert strat.generate_trade("SPY", day(close=100.05)) is not None
