@@ -292,3 +292,27 @@ destroys the edge (London breakouts work as counter-trend reversals more than
 trend-continuations here). Inverted variant is intriguing (higher per-trade efficiency)
 but gains concentrate in Jun-Aug exactly like the baseline — same variance problem,
 smaller sample. No variant adopted; London stays unfiltered, paper-only.
+
+## London parameter-robustness grid (2026-09-05, paper-only, theta OFF)
+
+42 runs = 7 months × 6 variants (13 symbols, Alpaca 5m, realism on). Monthly net $:
+
+| Month | baseline | rr2.5 | rr1.5 | hold45 | strength0.6 | strength0.9 |
+|---|---|---|---|---|---|---|
+| 2026-03 | 35t $237 | $-147 | $143 | $237 | $186 | $460 |
+| 2026-04 | 29t $-117 | $-463 | $-372 | $-117 | $67 | $165 |
+| 2026-05 | 42t $-31 | $189 | $34 | $-31 | $54 | $-39 |
+| 2026-06 | 40t $732 | $539 | $2,006 | $732 | $255 | $82 |
+| 2026-07 | 27t $776 | $493 | $1,070 | $776 | $802 | $832 |
+| 2026-08 | 13t $55 | $111 | $-29 | $55 | $55 | $-3 |
+| 2026-09a | 1t $-169 | $-169 | $-169 | $-169 | $-169 | $-169 |
+| **Total** | **187t $1,481** | **$552** | **$2,682** | **$1,481** | **$1,250** | **$1,327** |
+
+- rr1.5 is the only variant that beats baseline (+81%, $2,682 vs $1,481) — but the gain is
+  again concentrated in Jun ($2,006 of $2,682) and Apr gets WORSE. In-sample single test;
+  treat as candidate, not adopted. Needs out-of-sample confirmation before any config change.
+- rr2.5 sharply worse (-$929 vs baseline): wider targets give back open profits.
+- hold45 identical to baseline — 30-bar exit binds before 45 ever triggers.
+- breakout_strength 0.6/0.9 both near baseline: knob is robust, not knife-edge.
+- Structural finding: EVERY variant loses in Apr and (except strength0.9) underperforms
+  its own total in Mar. Month-level variance is not a parameter artifact.
