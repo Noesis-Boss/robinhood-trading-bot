@@ -224,9 +224,12 @@ into the first run — disable it or pass a stripped config for orb_fvg runs.)
 - 2026-09-05 — Strategy Lab UI: added `eps_line_put_selling` to both the repo dashboard (`web/src/App.tsx`, commit 55c04bd) and the live zo.space Strategy Lab route. Screenshot-verified at /robinhood-trading-bot: dropdown shows "EPS-line put selling (paper)" and selecting it renders all 7 params (target_pe 15, dte 730, iv 0.30, max_collateral_pct 0.30, min_days_between_entries 21, min_yield_annual_pct 5, securing cash).
 - 2026-08-10 — Added selectable `HAScalpStrategy` in `src/ha_scalp.py` and `--strategy ha_scalp`. Six-month Alpaca run at $300 across all 13 symbols (2026-02-10 to 2026-08-10) used 15-minute bars as a runtime approximation to the source's 1-minute chart and produced zero qualifying signals. No profitability claim is made.
 
-## Verified Edge (2026-08-30)
+## Verified Edge — status after out-of-sample check (2026-09-05)
 
-- **Strategy with the most profitable verified run to date: London (premarket breakout, default strategy).** Capital $10,000, 13-symbol universe (SPY QQQ AAPL TSLA NVDA SOFI F AAL MARA RIVN NIO RBLX DKNG), Alpaca 2026-07-01 to 2026-08-06, theta realism on: 66 trades, 59.1% win rate, 1.44 PF, **+$1,231.62** (directional +$1,203.30, theta +$28.32). Every other strategy either lost money, made zero trades, or was not run on the canonical period. London is the only verified edge; all others remain research-only.
+- **London (premarket breakout) remains the best strategy, but its edge did NOT hold out-of-sample.** Canonical window (2026-07-01→08-06, 13 symbols, theta on): 66 trades, 59.1% win, 1.44 PF, +$1,231.62.
+- Extended window (2026-07-01→09-03, same config): 86 trades, 56.98% win, 1.18 PF, net **+$728.15** — the Aug 7→Sep 3 slice contributed roughly -$500 compounded.
+- Out-of-sample slice standalone (2026-08-07→09-03): 26 trades, 57.7% win, **PF 0.87, net -$154.66**; 0 target hits on 13 directional trades (11 eod, 2 stop).
+- Verdict: the July profit was window-dependent, not a durable edge. PF < 1.0 out-of-sample means no verified profitable strategy exists yet. Do not enable live trading on London's historical results alone. Video-strategy stream is closed (orb_fvg, opening_drive_fade parked as not viable); next lever if pursued is a longer backtest for statistical power or accepting flat-to-negative expectancy.
 
 ## Opening Drive Fade (added 2026-09-05, paper-only research)
 
