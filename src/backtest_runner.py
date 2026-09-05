@@ -75,7 +75,7 @@ def summarize_trades(trades: list, start_date: str, end_date: str, symbols: list
     execution_cost = round(sum(float(t.get("execution_cost", 0)) for t in trades), 2)
     gross_wins = sum(float(t.get("pnl", 0)) for t in wins)
     gross_losses = sum(abs(float(t.get("pnl", 0))) for t in losses)
-    return {
+    summary = {
         "start_date": start_date,
         "end_date": end_date,
         "symbols": symbols,
@@ -95,6 +95,44 @@ def summarize_trades(trades: list, start_date: str, end_date: str, symbols: list
         "reason_counts": dict(Counter(t.get("reason", "unknown") for t in trades)),
         "trades": trades,
     }
+    gex_regimes = {}
+    for t in trades:
+        regime = t.get("gex_regime")
+        if regime is None:
+            continue
+        bucket = gex_regimes.setdefault(regime, {"trades": 0, "wins": 0, "net": 0.0})
+        bucket["trades"] += 1
+        bucket["wins"] += 1 if t.get("pnl", 0) > 0 else 0
+        bucket["net"] = round(bucket["net"] + float(t.get("pnl", 0)), 2)
+    if gex_regimes:
+        summary["gex_context"] = {
+            "matched_trades": sum(b["trades"] for b in gex_regimes.values()),
+            "by_regime": gex_regimes,
+            "note": "naive GEX proxy from data/gex_daily.csv (started 2026-09-05); history fills in over time",
+        }
+    return summary
+
+
+def load_gex_log(path: str = "data/gex_daily.csv") -> dict:
+    """Load daily GEX snapshots logged by src/gamma_monitor.py --log."""
+    import csv
+
+    try:
+        with open(path) as fh:
+            return {r["date"]: (float(r["net_gex"]), r["regime"]) for r in csv.DictReader(fh) if r.get("date")}
+    except FileNotFoundError:
+        return {}
+
+
+def annotate_gex(trades: list, gex_map: dict) -> None:
+    """Stamp net_gex + gex_regime onto trades by entry date (n/a when unlogged)."""
+    if not gex_map:
+        return
+    for t in trades:
+        ts = t.get("timestamp") or t.get("entry_time") or t.get("entry_date") or ""
+        net_gex, regime = gex_map.get(str(ts)[:10], (None, None))
+        t["net_gex"] = net_gex
+        t["gex_regime"] = regime
 
 
 def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, provider: str = "auto", strategy_name: str = "london", data_dir: str | None = None, json_output: bool = False, breakout_strength_override: float | None = None) -> list:
@@ -113,6 +151,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
     journal = TradeJournal("/tmp/backtest_journal.json")
     strat = STRATEGY_MAP[strategy_name](config, risk, journal)
     all_trades = []
+    gex_map = load_gex_log()
 
     if strategy_name in ("theta_only", "eps_line_put_selling"):
         selected_symbols = strat.symbols_for_run(symbols) if strategy_name == "theta_only" else symbols
@@ -124,7 +163,8 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                     candidate = Path(data_dir) / f"{symbol}_{start_date}_{end_date}.pkl"
                     if candidate.exists():
                         cached = pd.read_pickle(candidate)
-                df = cached if cached is not None else feed.get_bars(symbol, interval=config.get("bar_interval", "5m"), start=start_date, end=end_date)
+                interval = (config.get("eps_line_put_selling", {}).get("backtest_interval", "1d") if strategy_name == "eps_line_put_selling" else config.get("bar_interval", "5m"))
+                df = cached if cached is not None else feed.get_bars(symbol, interval=interval, start=start_date, end=end_date)
             except Exception as exc:
                 log.warning("  %s download failed: %s", symbol, exc)
                 continue
@@ -141,6 +181,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                 if result:
                     all_trades.append(result)
         if json_output:
+            annotate_gex(all_trades, gex_map)
             summary = summarize_trades(all_trades, start_date, end_date, selected_symbols, config.get("capital", 0))
             if strategy_name == "theta_only":
                 summary.update({"strategy": "theta_only", "selection_mode": strat.selection_mode, "aggressiveness": strat.preset_name, "directional_trades": 0})
@@ -153,7 +194,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                     days_elapsed = (pd.Timestamp(end_date).tz_localize("America/New_York") - pd.Timestamp(pos["entry_date"]).tz_localize("America/New_York")).days
                     years = max((strat.cfg["dte"] - days_elapsed) / 365.0, 0.0)
                     unrealized += bs_put_price(spot, pos["strike"], years, strat.cfg["iv"], strat.cfg["risk_free"]) * 100.0 * pos["contracts"]
-                summary.update({"strategy": "eps_line_put_selling", "paper_only": True, "open_positions": len(all_trades), "premium_collected": round(sum(t["premium_collected"] for t in all_trades), 2), "open_max_liability": round(sum(t["max_liability"] for t in all_trades), 2), "unrealized_mtm": round(unrealized, 2), "securing": strat.cfg["securing"], "dte": strat.cfg["dte"], "directional_trades": 0})
+                summary.update({"strategy": "eps_line_put_selling", "paper_only": True, "open_positions": len(all_trades), "premium_collected": round(sum(t["premium_collected"] for t in all_trades), 2), "open_max_liability": round(sum(t["max_liability"] for t in all_trades), 2), "unrealized_mtm": round(unrealized, 2), "securing": strat.cfg["securing"], "dte": strat.cfg["dte"], "directional_trades": 0, "blocked_entries": dict(strat.blocked_entries)})
             print(json.dumps(summary, default=str))
         return all_trades
 
@@ -187,7 +228,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                     cached = pd.read_pickle(candidate)
             df = cached if cached is not None else feed.get_bars(
                 symbol,
-                interval=(config.get("ha_scalp", {}).get("backtest_interval", "5m") if strategy_name == "ha_scalp" else config.get("t3_range_filter", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "t3_range_filter" else config.get("reversal_zone_confirmation", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "reversal_zone_confirmation" else config.get("ema20_stoch_pullback", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "ema20_stoch_pullback" else config.get("orb_fvg", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "orb_fvg" else config.get("bar_interval", "5m")),
+                interval=(config.get("eps_line_put_selling", {}).get("backtest_interval", "1d") if strategy_name == "eps_line_put_selling" else config.get("ha_scalp", {}).get("backtest_interval", "5m") if strategy_name == "ha_scalp" else config.get("t3_range_filter", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "t3_range_filter" else config.get("reversal_zone_confirmation", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "reversal_zone_confirmation" else config.get("ema20_stoch_pullback", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "ema20_stoch_pullback" else config.get("orb_fvg", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "orb_fvg" else config.get("bar_interval", "5m")),
                 start=start_date,
                 end=end_date,
             )
@@ -280,6 +321,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                                         "symbol": signal["symbol"],
                                         "trade_type": "theta_spread",
                                         "entry": signal["entry"],
+                                        "timestamp": signal.get("timestamp"),
                                         "direction": signal["direction"],
                                         "exit_price": signal["entry"],
                                         "qty": tf_result["contracts"],
@@ -305,6 +347,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                     "entry": round(entry, 2),
                     "exit_price": round(close, 2),
                     "exit_time": None,
+                    "timestamp": trade.get("timestamp"),
                     "qty": qty,
                     "pnl": round(pnl, 2),
                     "rr": round(abs(trade["target"] - entry) / abs(trade["stop"] - entry), 2)
@@ -320,6 +363,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                 all_trades.append(exit_result)
 
     if json_output:
+        annotate_gex(all_trades, gex_map)
         print(json.dumps(summarize_trades(all_trades, start_date, end_date, symbols, config.get("capital", 0)), default=str))
         return all_trades
 

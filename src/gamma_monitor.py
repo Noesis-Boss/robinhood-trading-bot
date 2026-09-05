@@ -106,13 +106,43 @@ def compute_gex(expiries=2, dte_min=0, dte_max=7):
     }
 
 
+def log_daily(result: dict, path: str = "data/gex_daily.csv") -> str:
+    """Append (or overwrite) today's GEX snapshot row. One row per calendar day."""
+    import csv
+    import os
+
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    rows = []
+    if os.path.exists(path):
+        with open(path) as fh:
+            rows = [r for r in csv.DictReader(fh) if r.get("date")]
+    today = dt.date.today().isoformat()
+    rows = [r for r in rows if r["date"] != today]
+    rows.append({
+        "date": today,
+        "spot": result["spot"],
+        "net_gex": result["net_gex"],
+        "regime": result["regime"],
+        "dte_max": result.get("dte_max", 7),
+    })
+    with open(path, "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["date", "spot", "net_gex", "regime", "dte_max"])
+        writer.writeheader()
+        writer.writerows(rows)
+    return path
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--expiries", type=int, default=2)
     ap.add_argument("--dte-min", type=int, default=0)
     ap.add_argument("--dte-max", type=int, default=7)
+    ap.add_argument("--log", action="store_true", help="append today's snapshot to data/gex_daily.csv")
     a = ap.parse_args()
-    print(json.dumps(compute_gex(a.expiries, a.dte_min, a.dte_max), indent=2))
+    result = compute_gex(a.expiries, a.dte_min, a.dte_max)
+    if a.log:
+        result["logged_to"] = log_daily(result)
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":
