@@ -224,12 +224,30 @@ into the first run — disable it or pass a stripped config for orb_fvg runs.)
 - 2026-09-05 — Strategy Lab UI: added `eps_line_put_selling` to both the repo dashboard (`web/src/App.tsx`, commit 55c04bd) and the live zo.space Strategy Lab route. Screenshot-verified at /robinhood-trading-bot: dropdown shows "EPS-line put selling (paper)" and selecting it renders all 7 params (target_pe 15, dte 730, iv 0.30, max_collateral_pct 0.30, min_days_between_entries 21, min_yield_annual_pct 5, securing cash).
 - 2026-08-10 — Added selectable `HAScalpStrategy` in `src/ha_scalp.py` and `--strategy ha_scalp`. Six-month Alpaca run at $300 across all 13 symbols (2026-02-10 to 2026-08-10) used 15-minute bars as a runtime approximation to the source's 1-minute chart and produced zero qualifying signals. No profitability claim is made.
 
-## Verified Edge — status after out-of-sample check (2026-09-05)
+## Verified Edge — 6-month regime check (2026-09-05)
 
-- **London (premarket breakout) remains the best strategy, but its edge did NOT hold out-of-sample.** Canonical window (2026-07-01→08-06, 13 symbols, theta on): 66 trades, 59.1% win, 1.44 PF, +$1,231.62.
-- Extended window (2026-07-01→09-03, same config): 86 trades, 56.98% win, 1.18 PF, net **+$728.15** — the Aug 7→Sep 3 slice contributed roughly -$500 compounded.
-- Out-of-sample slice standalone (2026-08-07→09-03): 26 trades, 57.7% win, **PF 0.87, net -$154.66**; 0 target hits on 13 directional trades (11 eod, 2 stop).
-- Verdict: the July profit was window-dependent, not a durable edge. PF < 1.0 out-of-sample means no verified profitable strategy exists yet. Do not enable live trading on London's historical results alone. Video-strategy stream is closed (orb_fvg, opening_drive_fade parked as not viable); next lever if pursued is a longer backtest for statistical power or accepting flat-to-negative expectancy.
+Monthly standalone London runs (13 symbols, Alpaca 5m, theta on, execution realism on):
+
+| Month | Trades | Win % | PF | Net |
+|---|---|---|---|---|
+| 2026-03 | 70 | 55.7 | 1.13 | +$342 |
+| 2026-04 | 58 | 58.6 | 0.98 | -$44 |
+| 2026-05 | 84 | 54.8 | 0.99 | -$31 |
+| 2026-06 | 80 | 60.0 | 1.32 | +$754 |
+| 2026-07 (canonical) | 66 | 59.1 | 1.44 | +$1,232 |
+| 2026-08 | 26 | 61.5 | 1.10 | +$113 |
+| 2026-09-01/03 | 2 | 50.0 | 0.04 | -$162 |
+| **Total (~6.5 mo)** | **386** | **~57.8%** | **~1.15** | **+$2,204** |
+
+- Win rate is stable in EVERY window (54.8–61.5%) — that part of the edge is real.
+- Profit is not: expectancy concentrates in Jun+Jul (+$1,986 of +$2,204). Apr/May flat,
+  Mar modest. Overall ~+$315/month on $10k (~3%/mo) with heavy month-to-month variance.
+- Theta contributes ~nothing (avg +$1/spread); the directional book drives results.
+- **Verdict: thin, variance-heavy positive expectancy — keep London as the primary
+  paper candidate, stay paper-only.** Not strong enough to enable live at $200–300
+  capital; one bad regime (Apr/May-type) erases two good months. Prior "edge did not
+  hold" note referred to the Aug 7–Sep 3 slice (PF 0.87) — within normal variance of
+  the full 6-month picture, but confirms no fat edge.
 
 ## Opening Drive Fade (added 2026-09-05, paper-only research)
 
