@@ -254,3 +254,28 @@ eps_line_put_selling:
   rsi_period: 14
   rsi_max: 40.0
   securing: "cash"
+
+# Opening Drive Fade (paper-research only): fade a one-directional opening drive.
+opening_drive_fade:
+  session_start: "09:30"
+  session_end: "15:45"
+  drive_end: "09:45"
+  drive_min_pct: 0.5
+  max_pullback_frac: 0.33
+  volume_multiplier: 1.2
+  stop_buffer_atr: 0.25
+  rr_ratio: 3.0
+  max_holding_bars: 66
+  atr_length: 14
+
+# ORB + FVG — paper-research only (from "The One Candle Setup" video).
+# Disabled for live execution until proven profitable in backtests.
+orb_fvg:
+  backtest_interval: "1m"
+  orb_minutes: 5
+  orb_end: "09:35"
+  entry_end: "11:30"
+  session_start: "09:30"
+  session_end: "15:45"
+  rr_ratio: 2.0
+  max_holding_bars: 90

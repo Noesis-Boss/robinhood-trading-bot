@@ -93,6 +93,35 @@ entry-month spot with independent remaining DTE. VZ book ($100k, EPS 3.84, 4 ent
 spacing): cash-secured SURVIVED at $78.8k (-21% on a -38.5% year); 2x margin MARGIN_CALL month 10
 (Oct 2008), final $38.0k (-62%). CLI: `--num-entries 4 --entry-spacing-days 21`.
 
+## ORB + FVG (added 2026-09-05, paper-only)
+
+Strategy: `src/orb_fvg.py` — from "The One Candle Setup" video (Cryptic Hustle).
+Marks the first 5-min candle (09:30-09:35 ET, wick-inclusive) high/low on 1-min bars,
+waits for a 1-min close outside the range, then requires a 3-candle FVG in the
+breakout direction (c1 to c3 window scanned from the breakout bar; c1 may be the
+breakout candle). Entry at c3 close, stop at the FVG extreme (wick-inclusive:
+c1.high for longs, c1.low for shorts), fixed 2R target, 1 trade/day, entries stop
+at 11:30, max hold 90 bars. Registered as `orb_fvg` in STRATEGY_MAP; config block
+`orb_fvg` (backtest_interval "1m"). NQ futures are not available on Alpaca — QQQ
+is the proxy.
+
+Baseline backtest (QQQ, Alpaca IEX 1m, 2026-08-01 to 2026-08-28, theta disabled,
+execution realism on: 5bps slippage + 5bps spread):
+- 18 trades, 3W/15L (16.7% win), PF 0.07, net -$368.04, gross -$30.88
+- Negative BEFORE costs: the setup itself has no edge at these parameters.
+- Root cause: wick-inclusive 1-min FVG stops are pennies wide, so 2R targets are
+  tiny in absolute terms (~$0.10-0.25/share); the ~$0.15/share round-trip cost
+  (spread+slippage) exceeds the target distance. Stops also get tagged by normal
+  1-min noise (13/18 stopped).
+- Verdict: fails as specified. Do NOT enable for live. If revisited: widen the
+  stop with an ATR buffer, require a minimum gap size (e.g. >= 0.1% of price),
+  and/or use 5-min FVG candles — but expectations should be low (source video
+  evidence quality 2/10: no verified track record, cherry-picked examples).
+
+Run: `python3 -m src.backtest_runner --strategy orb_fvg --symbols QQQ --start 2026-08-01 --end 2026-08-28 --provider alpaca --json`
+(theta_farming.enabled was true in config.yaml and leaked theta_spread trades
+into the first run — disable it or pass a stripped config for orb_fvg runs.)
+
 ## Key Source Files
 
 - `config.yaml` — strategy + theta farming params (tuning knobs: `breakout_strength`
@@ -193,3 +222,27 @@ spacing): cash-secured SURVIVED at $78.8k (-21% on a -38.5% year); 2x margin MAR
 ## Verified Edge (2026-08-30)
 
 - **Strategy with the most profitable verified run to date: London (premarket breakout, default strategy).** Capital $10,000, 13-symbol universe (SPY QQQ AAPL TSLA NVDA SOFI F AAL MARA RIVN NIO RBLX DKNG), Alpaca 2026-07-01 to 2026-08-06, theta realism on: 66 trades, 59.1% win rate, 1.44 PF, **+$1,231.62** (directional +$1,203.30, theta +$28.32). Every other strategy either lost money, made zero trades, or was not run on the canonical period. London is the only verified edge; all others remain research-only.
+
+## Opening Drive Fade (added 2026-09-05, paper-only research)
+
+Strategy: `src/opening_drive_fade.py` — fades one-directional opening drives (09:30→drive_end,
+default 09:45): |net move| ≥ drive_min_pct, path pullback ≤ max_pullback_frac of drive range,
+volume confirmation; stop beyond drive extreme + stop_buffer_atr×ATR, fixed-R target, 1 entry/symbol/day.
+Registered in STRATEGY_MAP + `opening_drive_fade` config block; CLI `--strategy opening_drive_fade`.
+
+**Verdict (2026-08-01→08-08, 1m cache, 13 symbols, $10k, execution realism on): NOT VIABLE — do not add to rotation.**
+Baseline: 62 directional trades, -$1,197, 21% win, PF 0.24. Best tuned variant (stop 4×ATR,
+drive ≥0.8%, pullback ≤20%, vol 1.5×, 2R): -$94, 40% win, PF 0.96 — breakeven, not edge.
+3 filter iterations (strict drive quality, shorter 1.5R targets, wider stops to 6×ATR) all lost.
+Dominant lever was stop width (razor-thin 1m-ATR stops → 48/62 stop-outs). Raw drive fading without
+a higher-timeframe level target or news filter has no edge on this universe/window.
+Level-fade variant (2026-09-05): drives must reach prior-day H/L ±level_buffer_atr×ATR (runner passes
+prior_high/prior_low to the strategy; require_level/level_buffer_atr config). Buffers 1/2/3 ATR →
+21/-\$256, 20/-\$312, 20/-\$336 — worse than the -$94 ungated tuned baseline. Level gate improves selectivity
+but kills the better-location entries. Verdict stands: park, do not add to rotation.
+**Level-gate variant (2026-09-05): also NOT VIABLE.** Added `require_level` + `level_buffer_atr`
+(strategy + runner passes prior-day high/low context): drive must terminate at prior-day H/L ±buffer.
+E-best params + gate: buffer 1.0 → 21 trades -$256; 2.0 → 20 trades -$311.70 (30% win, PF 0.64);
+3.0 → 20 trades -$335.64 (30% win, PF 0.63). Level gating raised win rate (21→30%) but cut profit
+trades harder than losers — net worse than the -$94 ungated baseline. Both variants closed: strategy
+parked, kept out of rotation.

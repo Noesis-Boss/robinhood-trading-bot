@@ -30,6 +30,8 @@ from src.ema_cci_macd import EmaCciMacdStrategy
 from src.ema9_continuation import Ema9ContinuationStrategy
 from src.candle_narrative import CandleNarrativeStrategy
 from src.ema20_stoch_pullback import Ema20StochPullbackStrategy
+from src.opening_drive_fade import OpeningDriveFadeStrategy
+from src.orb_fvg import OrbfvgStrategy
 from src.risk import RiskManager
 from src.journal import TradeJournal
 from src.theta_farming import ThetaFarmer
@@ -52,6 +54,8 @@ STRATEGY_MAP = {
     "ema_cci_macd": EmaCciMacdStrategy,
     "ema9_continuation": Ema9ContinuationStrategy,
     "ema20_stoch_pullback": Ema20StochPullbackStrategy,
+    "opening_drive_fade": OpeningDriveFadeStrategy,
+    "orb_fvg": OrbfvgStrategy,
     "candle_narrative": CandleNarrativeStrategy,
     "theta_only": ThetaOnlyStrategy,
     "eps_line_put_selling": EpsLinePutSellingStrategy,
@@ -166,7 +170,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                     cached = pd.read_pickle(candidate)
             df = cached if cached is not None else feed.get_bars(
                 symbol,
-                interval=(config.get("ha_scalp", {}).get("backtest_interval", "5m") if strategy_name == "ha_scalp" else config.get("t3_range_filter", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "t3_range_filter" else config.get("reversal_zone_confirmation", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "reversal_zone_confirmation" else config.get("ema20_stoch_pullback", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "ema20_stoch_pullback" else config.get("bar_interval", "5m")),
+                interval=(config.get("ha_scalp", {}).get("backtest_interval", "5m") if strategy_name == "ha_scalp" else config.get("t3_range_filter", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "t3_range_filter" else config.get("reversal_zone_confirmation", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "reversal_zone_confirmation" else config.get("ema20_stoch_pullback", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "ema20_stoch_pullback" else config.get("orb_fvg", {}).get("backtest_interval", config.get("bar_interval", "5m")) if strategy_name == "orb_fvg" else config.get("bar_interval", "5m")),
                 start=start_date,
                 end=end_date,
             )
@@ -189,7 +193,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
 
         for day in trade_dates:
             day_data = df[df.index.normalize() == day].sort_index()
-            min_day_bars = 8 if strategy_name == "t3_range_filter" else (40 if config.get("bar_interval", "5m") == "5m" else 8)
+            min_day_bars = 8 if strategy_name == "t3_range_filter" else (35 if strategy_name == "orb_fvg" else (40 if config.get("bar_interval", "5m") == "5m" else 8))
             if len(day_data) < min_day_bars:
                 continue
 
@@ -204,7 +208,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                 session_start = pd.Timestamp(config.get("ross_momentum", {}).get("session_start", "04:00")).time()
                 session_end = pd.Timestamp(config.get("ross_momentum", {}).get("session_end", "12:00")).time()
                 ny_mask = (day_data.index.time >= session_start) & (day_data.index.time < session_end)
-            elif strategy_name in {"ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "candle_narrative"}:
+            elif strategy_name in {"ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "candle_narrative", "opening_drive_fade", "orb_fvg"}:
                 box_high = box_low = None
                 session_start, session_end = strat.session_start, strat.session_end
                 ny_mask = (day_data.index.time >= session_start) & (day_data.index.time < session_end)
@@ -235,7 +239,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
 
                 if symbol not in strat._active_trades:
                     context = (box_high, box_low) if strategy_name == "london" else None
-                    if strategy_name == "sneaky":
+                    if strategy_name in ("sneaky", "opening_drive_fade"):
                         prior = df[df.index.normalize() < day]
                         context = {"prior_high": float(prior["high"].max()), "prior_low": float(prior["low"].min())} if not prior.empty else None
                     signal = strat.generate_signal(symbol, bars_slice, context)
