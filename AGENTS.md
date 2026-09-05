@@ -64,7 +64,10 @@ Strategy: `src/eps_line_put_selling.py` — sell LONG-dated puts (default 730 DT
 Cash-secured by default; optional margin securing for stress testing. Strike defaults to the
 EPS line itself (assignment at fair value is the thesis). Premium via Black-Scholes (bs_put_price).
 Non-earners are skipped: generate_trade returns None for zero/negative EPS, so loss-making
-trailing-EPS symbols (e.g. F) can never anchor a nonsensical strike.
+trailing-EPS symbols (e.g. F) can never anchor a nonsensical strike. ETFs/funds (SPY, QQQ —
+no trailing EPS) are skipped up front by the runner with a WARNING so `blocked_entries` counts
+only real gate decisions.
+
 Config: `eps_line_put_selling` block in config.yaml (`eps` per-symbol map, `target_pe`, `dte`, `iv`,
 `max_collateral_pct` 0.30, `min_days_between_entries` 21, `securing` cash|margin, `margin_leverage`).
 Requires per-symbol EPS in config or no trades fire. Wired into STRATEGY_MAP and web API
@@ -78,6 +81,15 @@ each trade reports `yield_annual_pct`. Entry-quality gate (2026-09-05):
 recently-rallied entries never fire. Both are Strategy Lab UI params.
 Zero-param runs work: config.yaml `eps_line_put_selling` seed (SPY/QQQ/T/VZ) + auto-resolve
 of missing trailing EPS via yfinance in the runner.
+
+Blocked-entry diagnostics: generate_trade counts every veto reason (no_eps,
+min_days_between_entries, above_eps_line, max_distance_to_line_pct, rsi_max,
+min_yield_annual_pct, no_collateral) into `strat.blocked_entries`; the JSON summary reports
+`blocked_entries` so zero-trade runs are explainable. Runner note: the eps loop passes the
+CUMULATIVE frame up to each day (`df[df.index <= day]`), not a same-day slice — generate_trade
+needs trailing daily closes for RSI. Gated validation (2026-07-01→09-03, T+VZ, $100k, yfinance 1d):
+0 trades, 88 blocks by max_distance_to_line_pct — T trades ~42% below its EPS line, VZ ~13%.
+Gate working as designed; no entry-quality violations fired.
 
 Margin stress: `src/margin_stress.py` — replays the real 2008 SPX monthly path (-38.5%) with
 stressed IV on down months, maintenance-margin check, forced-liquidation spiral detection.
@@ -339,3 +351,23 @@ backtests shown in 43 minutes; examples cherry-picked. Unbacked claims rejected:
 drives — already tested as opening_drive_fade and failed (see above). Gamma monitor context:
 src/gamma_monitor.py SPY GEX proxy uses a naive dealer assumption (calls+/puts-); regime label is
 context, not a trading signal.
+
+## Video Eval: "Claude Just Changed the Stock Market Forever!" (Samin Yasar, lH5wrfNwL3k, 2026-09-05)
+
+**Verdict: 5/10 concept, 2/10 evidence, 4/10 stack fit. Stream closed.**
+Three Claude Desktop + Alpaca paper-trading builds: (1) trailing-stop bot with
+ladder buys, (2) politician copy-trading via Capitol Trades MCP, (3) wheel
+strategy (cash-secured puts + covered calls). Trailing stop and wheel mechanics
+are textbook-correct; nothing novel. Evidence is weak: zero backtests of the
+actual bot logic; the politician edge is ONE cherry-picked year copying ONE
+politician (Michael McCaul) vs S&P with no slippage, fees, or stale-disclosure
+modeling — disclosure lag hand-waved away with "Congress buys 2 years out." Wheel
+pitched as "income no matter which direction the stock moves" — misleading; the
+wheel carries full underlying downside. Bad practices shown: API keys saved as
+plaintext in a project folder, "bypass permissions" mode for order placement.
+Stack fit vs ours: trailing-stop bot is directly implementable on the IEX OHLCV
+feed + Alpaca order API (only piece with fit); wheel needs options data — same
+blocker as the gamma video (IEX is OHLCV-only, no historical chains for
+backtesting); copy-trading data (Capitol Trades) is free but stale and includes
+names Alpaca can't trade. If anything gets adopted, it is the trailing-stop +
+ladder paper strategy — same paper-only discipline we already use.
