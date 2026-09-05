@@ -316,3 +316,13 @@ smaller sample. No variant adopted; London stays unfiltered, paper-only.
 - breakout_strength 0.6/0.9 both near baseline: knob is robust, not knife-edge.
 - Structural finding: EVERY variant loses in Apr and (except strength0.9) underperforms
   its own total in Mar. Month-level variance is not a parameter artifact.
+
+## Gamma Monitor (added 2026-09-05, read-only)
+
+`src/gamma_monitor.py` — naive SPY GEX proxy from yfinance option chains
+(dte_max default 7): BS gamma x OI x 100 x spot, calls positive / puts negative.
+`get_gamma_regime(symbol="SPY", dte_max=7)` returns net_gex + regime label.
+Live check 2026-09-05: SPY 770.19, net GEX -6.3M (negative regime),
+expiries 2026-09-08..09-11. NAIVE assumption (dealers long calls / short puts) —
+proxy only, no dealer-positioning ground truth. Read-only; no order placement;
+not wired into London entries. Use as context filter only, never as a signal.
