@@ -1,0 +1,523 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Robinhood Trading Bot",
+    "subtitle": "Paper-first research + execution stack \u2014 Noesis-Boss/robinhood-trading-bot",
+    "visual_preset": "blueprint",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Noesis-Boss/robinhood-trading-bot",
+      "revision": "1d376f71897c567296846df43f3fcc1583ecd3ec"
+    },
+    "views": [
+      {
+        "id": "data-path",
+        "label": "Data path",
+        "focus": [
+          "daily-universe",
+          "market-data",
+          "data",
+          "strategy-core"
+        ],
+        "note": "Bars flow from the provider through src/data.py into the strategy registry."
+      },
+      {
+        "id": "strategy-lab",
+        "label": "Strategy lab",
+        "focus": [
+          "strategy-core",
+          "strategy-variants",
+          "proxies",
+          "backtest-runner"
+        ],
+        "note": "Registered variants run through the batch backtest engine with liquidity context."
+      },
+      {
+        "id": "execution",
+        "label": "Execution + safety",
+        "focus": [
+          "execution-realism",
+          "broker",
+          "robinhood",
+          "risk"
+        ],
+        "note": "Paper-first fills with spread + slippage modeling before any live path."
+      }
+    ],
+    "viewBox": [
+      1240,
+      850
+    ]
+  },
+  "layout": {
+    "mode": "grid"
+  },
+  "components": [
+    {
+      "id": "daily-universe",
+      "type": "backend",
+      "label": "Daily Universe",
+      "sublabel": "src/daily_universe.py",
+      "sources": [
+        {
+          "path": "src/daily_universe.py"
+        }
+      ],
+      "pos": [
+        60,
+        110
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "data",
+      "type": "backend",
+      "label": "Market Data",
+      "sublabel": "src/data.py",
+      "sources": [
+        {
+          "path": "src/data.py"
+        }
+      ],
+      "pos": [
+        60,
+        310
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "market-data",
+      "type": "external",
+      "label": "Market Provider",
+      "sublabel": "Alpaca / yfinance bars",
+      "pos": [
+        60,
+        510
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "strategy-core",
+      "type": "backend",
+      "label": "Strategy Registry",
+      "sublabel": "src/strategy.py + CLI",
+      "sources": [
+        {
+          "path": "src/strategy.py"
+        }
+      ],
+      "pos": [
+        360,
+        110
+      ],
+      "size": [
+        210,
+        72
+      ]
+    },
+    {
+      "id": "strategy-variants",
+      "type": "backend",
+      "label": "Strategy Variants",
+      "sublabel": "ema9 \u00b7 ema20-stoch \u00b7 T3 \u00b7 ORB",
+      "sources": [
+        {
+          "path": "src/ema9_continuation.py"
+        },
+        {
+          "path": "src/t3_range_filter.py"
+        }
+      ],
+      "pos": [
+        360,
+        310
+      ],
+      "size": [
+        210,
+        72
+      ]
+    },
+    {
+      "id": "proxies",
+      "type": "backend",
+      "label": "Liquidity Proxies",
+      "sublabel": "auction flow \u00b7 VWAP \u00b7 GEX",
+      "sources": [
+        {
+          "path": "src/auction_flow_proxy.py"
+        },
+        {
+          "path": "src/vwap_liquidity_proxy.py"
+        },
+        {
+          "path": "src/gamma_monitor.py"
+        }
+      ],
+      "pos": [
+        360,
+        510
+      ],
+      "size": [
+        210,
+        72
+      ]
+    },
+    {
+      "id": "backtest-runner",
+      "type": "backend",
+      "label": "Backtest Runner",
+      "sublabel": "src/backtest_runner.py + framework/",
+      "sources": [
+        {
+          "path": "src/backtest_runner.py"
+        },
+        {
+          "path": "framework/engine.py"
+        }
+      ],
+      "pos": [
+        660,
+        110
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "execution-realism",
+      "type": "backend",
+      "label": "Execution Realism",
+      "sublabel": "spread + slippage model",
+      "sources": [
+        {
+          "path": "src/execution_realism.py"
+        }
+      ],
+      "pos": [
+        660,
+        310
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "broker",
+      "type": "backend",
+      "label": "Broker",
+      "sublabel": "src/broker.py \u2014 paper sim",
+      "sources": [
+        {
+          "path": "src/broker.py"
+        }
+      ],
+      "pos": [
+        660,
+        510
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "risk",
+      "type": "security",
+      "label": "Risk Gates",
+      "sublabel": "src/risk.py",
+      "sources": [
+        {
+          "path": "src/risk.py"
+        }
+      ],
+      "pos": [
+        960,
+        110
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "robinhood",
+      "type": "external",
+      "label": "Robinhood",
+      "sublabel": "paper \u2192 live (env-gated)",
+      "pos": [
+        960,
+        510
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "journal",
+      "type": "database",
+      "label": "Trade Journal",
+      "sublabel": "src/journal.py \u00b7 projections.json",
+      "sources": [
+        {
+          "path": "src/journal.py"
+        }
+      ],
+      "pos": [
+        360,
+        720
+      ],
+      "size": [
+        210,
+        72
+      ]
+    },
+    {
+      "id": "monitor",
+      "type": "backend",
+      "label": "Monitor",
+      "sublabel": "src/monitor.py",
+      "sources": [
+        {
+          "path": "src/monitor.py"
+        }
+      ],
+      "pos": [
+        60,
+        720
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "web-api",
+      "type": "backend",
+      "label": "Web API",
+      "sublabel": "web/api.py",
+      "sources": [
+        {
+          "path": "web/api.py"
+        }
+      ],
+      "pos": [
+        660,
+        720
+      ],
+      "size": [
+        200,
+        72
+      ]
+    },
+    {
+      "id": "dashboard",
+      "type": "frontend",
+      "label": "Dashboard",
+      "sublabel": "web/src/App.tsx",
+      "sources": [
+        {
+          "path": "web/src/App.tsx"
+        }
+      ],
+      "pos": [
+        960,
+        720
+      ],
+      "size": [
+        200,
+        72
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Data + universe",
+      "wraps": [
+        "daily-universe",
+        "data",
+        "market-data"
+      ],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "Strategy Lab \u2014 src/ + framework/",
+      "wraps": [
+        "strategy-core",
+        "strategy-variants",
+        "proxies",
+        "backtest-runner"
+      ],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "Execution \u2014 paper-first",
+      "wraps": [
+        "execution-realism",
+        "broker",
+        "robinhood",
+        "risk"
+      ],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "Ops + monitoring",
+      "wraps": [
+        "monitor",
+        "journal",
+        "web-api",
+        "dashboard"
+      ],
+      "pad": 16
+    }
+  ],
+  "connections": [
+    {
+      "id": "universe-to-data",
+      "from": "daily-universe",
+      "to": "data",
+      "label": "symbol list",
+      "labelDy": 20
+    },
+    {
+      "id": "md-to-data",
+      "from": "market-data",
+      "to": "data",
+      "label": "bars",
+      "labelDy": -14
+    },
+    {
+      "id": "data-to-core",
+      "from": "data",
+      "to": "strategy-core",
+      "label": "features",
+      "variant": "emphasis"
+    },
+    {
+      "id": "core-to-variants",
+      "from": "strategy-core",
+      "to": "strategy-variants",
+      "label": "run",
+      "labelDy": 20
+    },
+    {
+      "id": "variants-to-proxies",
+      "from": "strategy-variants",
+      "to": "proxies",
+      "label": "context",
+      "labelDx": 24,
+      "labelDy": 20
+    },
+    {
+      "id": "core-to-runner",
+      "from": "strategy-core",
+      "to": "backtest-runner",
+      "label": "signals",
+      "variant": "emphasis",
+      "labelDy": 14
+    },
+    {
+      "id": "runner-to-realism",
+      "from": "backtest-runner",
+      "to": "execution-realism",
+      "label": "fill model",
+      "labelDx": 16,
+      "labelDy": 20
+    },
+    {
+      "id": "realism-to-broker",
+      "from": "execution-realism",
+      "to": "broker",
+      "label": "orders",
+      "labelDy": 20
+    },
+    {
+      "id": "runner-to-journal",
+      "from": "backtest-runner",
+      "to": "journal",
+      "label": "results + projections",
+      "variant": "dashed",
+      "labelDx": -30
+    },
+    {
+      "id": "risk-to-broker",
+      "from": "risk",
+      "to": "broker",
+      "label": "risk limits",
+      "variant": "security",
+      "labelDy": 20
+    },
+    {
+      "id": "broker-to-rh",
+      "from": "broker",
+      "to": "robinhood",
+      "label": "paper / live",
+      "variant": "emphasis",
+      "labelDy": 14
+    },
+    {
+      "id": "journal-to-monitor",
+      "from": "journal",
+      "to": "monitor",
+      "label": "metrics",
+      "labelDy": 14
+    },
+    {
+      "id": "journal-to-webapi",
+      "from": "journal",
+      "to": "web-api",
+      "label": "read",
+      "labelDy": 14
+    },
+    {
+      "id": "api-to-dash",
+      "from": "web-api",
+      "to": "dashboard",
+      "label": "poll",
+      "labelDy": 14
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Paper-first by default",
+      "items": [
+        "Broker simulates fills; live Robinhood is env-gated",
+        "Execution realism prices spread + slippage into every backtest"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Strategy lab",
+      "items": [
+        "Variants register through src/strategy.py CLI",
+        "Batch backtests + sensitivity run via framework/ engine"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Evidence",
+      "items": [
+        "Trade journal records fills + projections.json",
+        "Web dashboard reads the journal through web/api.py"
+      ]
+    }
+  ]
+}
