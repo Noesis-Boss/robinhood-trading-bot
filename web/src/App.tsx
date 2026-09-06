@@ -199,6 +199,18 @@ const strategies = {
       ["securing", "Securing (cash|margin)", "cash"],
     ],
   },
+  trailing_stop_ladder: {
+    label: "Trailing stop ladder (paper)",
+    params: [
+      ["ema_fast", "EMA fast", 9],
+      ["ema_slow", "EMA slow", 50],
+      ["volume_multiplier", "Volume multiplier", 1.2],
+      ["stop_buffer_atr", "Stop buffer ATR", 0.5],
+      ["rung_r", "Rung size (R)", 1.0],
+      ["lock_offset_r", "Lock offset (R)", 1.0],
+      ["max_holding_bars", "Max holding bars", 78],
+    ],
+  },
 } as const;
 type Strategy = keyof typeof strategies;
 

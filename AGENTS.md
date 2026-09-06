@@ -371,3 +371,21 @@ blocker as the gamma video (IEX is OHLCV-only, no historical chains for
 backtesting); copy-trading data (Capitol Trades) is free but stale and includes
 names Alpaca can't trade. If anything gets adopted, it is the trailing-stop +
 ladder paper strategy — same paper-only discipline we already use.
+
+## Trailing Stop Ladder (added 2026-09-06, paper-only)
+
+Strategy: `src/trailing_stop_ladder.py` — from the "Claude changed the stock market"
+video eval (concept 4/10, evidence 2/10, stack fit 7/10). The only adoptable piece was
+a trailing-stop ladder. EMA(4/10) trend + momentum + volume-spike continuation entry
+(1/symbol/day, cutoff 11:30), initial stop at N-bar swing extreme minus ATR buffer,
+then a rung ladder: every +1R of peak favorable excursion locks the stop 1R lower
+(rung 1 = breakeven). Exits: trailing stop / initial stop / max hold / session close.
+Registered in STRATEGY_MAP, runner session branch, web API allowlist, Strategy Lab
+dropdown (8 params), config block `trailing_stop_ladder`. Tests: 3 passed; web build OK.
+
+**Verdict (2026-08-01→08-08, Alpaca, 13 symbols, $10k, realism on, theta off): NOT VIABLE — parked, not in rotation.**
+- 1m baseline: 65 trades, 40.0% win, PF 0.75, net -$838.33 (gross +$465.83, cost -$1,304.16). Zero rungs reached.
+- 1m tight rungs (swing 5, buffer 0.25 ATR, rung 0.5R/lock 0.5R): -$1,664.02, PF 0.11 — tighter stops get whipsawed (37 trailing stops lock pennies, 27 full stop-outs).
+- 5m baseline: 46 trades, 30.4% win, PF 0.51, net -$791.80 (gross +$80.93, cost -$872.73). Still zero rungs reached.
+- Root cause, same as orb_fvg: ~$13-20/trade execution cost vs ~$7 avg gross edge; and one full R of intraday favorable excursion is rare on this universe, so the ladder's payoff structure never materializes.
+- Both timeframes and both rung spacings fail; no further variants planned.

@@ -20,7 +20,7 @@ JOBS = {}
 LOCK = threading.Lock()
 ROBINHOOD = RobinhoodReadOnly()
 MONITOR_CONFIG_PATH = ROOT / "config.yaml"
-STRATEGIES = {"london", "ross", "sneaky", "ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "theta_only", "eps_line_put_selling"}
+STRATEGIES = {"london", "ross", "sneaky", "ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "opening_drive_fade", "orb_fvg", "trailing_stop_ladder", "theta_only", "eps_line_put_selling"}
 TICKER = re.compile(r"^[A-Z][A-Z0-9.\-]{0,9}$")
 
 

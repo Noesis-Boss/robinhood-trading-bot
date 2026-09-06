@@ -285,3 +285,19 @@ regime_filter:
   enabled: false
   symbol: SPY
   ma_length: 50
+
+# Trailing Stop Ladder (paper-research only, from the "Claude changed the market" video eval).
+trailing_stop_ladder:
+  session_start: "09:35"
+  session_end: "15:45"
+  entry_cutoff: "15:00"
+  ema_fast: 9
+  ema_slow: 50
+  momentum_lookback: 3
+  volume_multiplier: 1.2
+  swing_lookback: 10
+  stop_buffer_atr: 0.5
+  atr_length: 14
+  rung_r: 1.0
+  lock_offset_r: 1.0
+  max_holding_bars: 78

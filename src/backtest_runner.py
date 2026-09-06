@@ -32,6 +32,7 @@ from src.candle_narrative import CandleNarrativeStrategy
 from src.ema20_stoch_pullback import Ema20StochPullbackStrategy
 from src.opening_drive_fade import OpeningDriveFadeStrategy
 from src.orb_fvg import OrbfvgStrategy
+from src.trailing_stop_ladder import TrailingStopLadderStrategy
 from src.risk import RiskManager
 from src.journal import TradeJournal
 from src.theta_farming import ThetaFarmer
@@ -56,6 +57,7 @@ STRATEGY_MAP = {
     "ema20_stoch_pullback": Ema20StochPullbackStrategy,
     "opening_drive_fade": OpeningDriveFadeStrategy,
     "orb_fvg": OrbfvgStrategy,
+    "trailing_stop_ladder": TrailingStopLadderStrategy,
     "candle_narrative": CandleNarrativeStrategy,
     "theta_only": ThetaOnlyStrategy,
     "eps_line_put_selling": EpsLinePutSellingStrategy,
@@ -266,7 +268,7 @@ def run_backtest(config: dict, symbols: list, start_date: str, end_date: str, pr
                 session_start = pd.Timestamp(config.get("ross_momentum", {}).get("session_start", "04:00")).time()
                 session_end = pd.Timestamp(config.get("ross_momentum", {}).get("session_end", "12:00")).time()
                 ny_mask = (day_data.index.time >= session_start) & (day_data.index.time < session_end)
-            elif strategy_name in {"ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "candle_narrative", "opening_drive_fade", "orb_fvg"}:
+            elif strategy_name in {"ha_scalp", "auction_flow_proxy", "vwap_liquidity_proxy", "t3_range_filter", "reversal_zone_confirmation", "ema_cci_macd", "ema9_continuation", "ema20_stoch_pullback", "candle_narrative", "opening_drive_fade", "orb_fvg", "trailing_stop_ladder"}:
                 box_high = box_low = None
                 session_start, session_end = strat.session_start, strat.session_end
                 ny_mask = (day_data.index.time >= session_start) & (day_data.index.time < session_end)
