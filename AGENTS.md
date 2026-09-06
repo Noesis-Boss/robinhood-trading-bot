@@ -139,6 +139,26 @@ Run: `python3 -m src.backtest_runner --strategy orb_fvg --symbols QQQ --start 20
 (theta_farming.enabled was true in config.yaml and leaked theta_spread trades
 into the first run — disable it or pass a stripped config for orb_fvg runs.)
 
+## Trailing Stop Ladder (added 2026-09-06, paper-only research)
+
+Strategy: `src/trailing_stop_ladder.py` — from the "Claude just changed the stock market" video eval.
+EMA9/EMA50 trend + 3-bar momentum + 1.2x volume; stop at swing low - 0.5 ATR; after each +1R rung
+the stop ladders up to (entry - (rung-1) x R) i.e. breakeven at first rung, +1R locked at second;
+max hold 78 bars, 1 entry/symbol/day, session 09:35-15:45, entries stop at 15:00.
+Registered in STRATEGY_MAP, config block `trailing_stop_ladder`, CLI, API allowlist, Strategy Lab
+UI params; tests in `tests/test_trailing_stop_ladder.py` (3 passed).
+
+**Verdict (2026-08-01→08-08, 1m cache, 13 symbols, $10k, theta off, realism on 5+5bps): NOT VIABLE.**
+- Baseline: 46 trades, 14W/32L (30.4% win), PF 0.51, gross +$80.93, execution cost -$872.73, net -$791.80.
+- Variant rung_r 0.5 / lock 0.75R: 46 trades, 28.3% win, PF 0.47, net -$804.46 (24 trailing-stop exits —
+  locking earlier just cuts winners sooner).
+- Variant strict entries (mom 5, vol 1.5x) + rung 0.5: 36 trades, 25% win, PF 0.37, gross NEGATIVE (-$82.10), net -$780.49.
+- Root cause: the ladder's breakeven lock converts normal pullbacks into trailing-stop losses
+  (same failure mode as Opening Drive Fade's razor stops), and gross edge (~+$81 on 46 trades)
+  never clears the ~$873 round-trip cost. Win rate 30% with avg loss $42.51 vs avg win $24.08.
+- Parked, not in rotation, no further variants planned. Consistent with the video-eval pattern:
+  presentation-quality claims, no verified track record.
+
 ## Key Source Files
 
 - `config.yaml` — strategy + theta farming params (tuning knobs: `breakout_strength`
