@@ -389,3 +389,28 @@ dropdown (8 params), config block `trailing_stop_ladder`. Tests: 3 passed; web b
 - 5m baseline: 46 trades, 30.4% win, PF 0.51, net -$791.80 (gross +$80.93, cost -$872.73). Still zero rungs reached.
 - Root cause, same as orb_fvg: ~$13-20/trade execution cost vs ~$7 avg gross edge; and one full R of intraday favorable excursion is rare on this universe, so the ladder's payoff structure never materializes.
 - Both timeframes and both rung spacings fail; no further variants planned.
+
+## Trailing Stop Ladder (added 2026-09-06, paper-only research)
+
+Strategy: `src/trailing_stop_ladder.py` — from the "Claude just changed the stock
+market" video (lH5wrfNwL3k). EMA9/50 trend + 3-bar momentum + volume entry; stop at
+swing low/high ± 0.5×ATR(14); ladder lock: each +1R peak rung moves the stop to
+entry − (rung−1)×R (breakeven at rung 1, then locks profit). 1 entry/symbol/day,
+cutoff 15:00, eod 15:45, max hold 78 bars. Registered in STRATEGY_MAP, CLI, web
+API allowlist, Strategy Lab UI, config block `trailing_stop_ladder`. Tests:
+`tests/test_trailing_stop_ladder.py` (3 passed).
+
+**Verdict (2026-08-01→08-08, 13 symbols, Alpaca 5m, theta OFF, realism on):
+NOT VIABLE — do not add to rotation.**
+- Baseline: 46 trades, 14W/32L (30.4% win), PF 0.51, gross +$80.93, execution
+  cost -$872.73, net -$791.80.
+- Looser ladder (rung 2R/lock 2R): identical ~PF 0.51, net -$792 — ladder spacing
+  is not the lever.
+- Stricter momentum (5-bar, 1.5× vol): 36 trades, PF 0.47, net -$687 — worse.
+- Same failure shape as opening_drive_fade/orb_fvg: gross edge ≈ $0 before costs;
+  ~$19/trade round-trip cost (5bps slippage + 5bps spread) turns breakeven into
+  -8R over the week. 30 eod_closes vs 16 stop_losses also shows trades never
+  reach the ladder rungs.
+- First theta-on run leaked 46 theta_spread trades into the summary (config
+  theta_farming.enabled) — always pass `--theta false` for directional research.
+Parked, not in rotation, no further variants planned.
