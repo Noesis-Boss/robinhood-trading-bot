@@ -91,6 +91,15 @@ needs trailing daily closes for RSI. Gated validation (2026-07-01→09-03, T+VZ,
 0 trades, 88 blocks by max_distance_to_line_pct — T trades ~42% below its EPS line, VZ ~13%.
 Gate working as designed; no entry-quality violations fired.
 
+Gate sensitivity sweep (2026-01-01→09-05, MO+DG, $100k, auto-EPS 4.75/7.70): the default
+envelope (distance <=2% + RSI<40) never fires in 9 months — MO spent the year above its
+EPS line and its one dip below missed the band; 0 trades is gate-tightness, not a bug.
+Firing envelope: dist 10% + RSI 40 -> 3 trades ($9.3k premium, MTM +$5.9k); dist 10% +
+RSI 50/60 -> 6 trades ($18.2k premium, MTM +$11.8k); dist 5% never fires even at RSI 60.
+Read: the strategy only trades in real drawdowns onto fair value — which is when
+put-selling at fair value is actually the thesis. Keep 2% default (conservative); use
+10%/RSI-50 in Strategy Lab to make it tradeable in quiet regimes.
+
 Margin stress: `src/margin_stress.py` — replays the real 2008 SPX monthly path (-38.5%) with
 stressed IV on down months, maintenance-margin check, forced-liquidation spiral detection.
 Run: `python3 -m src.margin_stress --portfolio-value 100000 --eps 28 --securing margin --margin-leverage 2.0`
